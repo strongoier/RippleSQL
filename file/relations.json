@@ -1,0 +1,25 @@
+{
+  "relations": [
+    {
+      "name": "click.db",
+      "attributes": [
+        "String",
+        "String",
+        "String",
+        "Float",
+        "String"
+      ]
+    },
+    {
+      "name": "hover.db",
+      "attributes": [
+        "String",
+        "String",
+        "String",
+        "Float",
+        "String",
+        "String"
+      ]
+    }
+  ]
+}
