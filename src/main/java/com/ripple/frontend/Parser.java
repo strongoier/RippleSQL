@@ -4,15 +4,22 @@
 					// line 2 "src/main/java/com/ripple/frontend/Parser.jay"
 package com.ripple.frontend;
 
-import java.io.*;
-import java.util.*;
+import com.ripple.database.*;
 import com.ripple.operator.*;
-import com.ripple.relation.*;
+import com.ripple.query.*;
 import com.ripple.value.*;
+
+import java.util.*;
 
 public class Parser {
 
-					// line 16 "-"
+  private QueryManager manager;
+
+  public Parser(QueryManager m) {
+    manager = m;
+  }
+
+					// line 23 "-"
   // %token constants
   public static final int SHOW = 257;
   public static final int DATABASES = 258;
@@ -22,17 +29,17 @@ public class Parser {
   public static final int SELECT = 262;
   public static final int FROM = 263;
   public static final int WHERE = 264;
-  public static final int LT = 265;
-  public static final int LE = 266;
-  public static final int GT = 267;
-  public static final int GE = 268;
-  public static final int EQ = 269;
-  public static final int NE = 270;
-  public static final int INT = 271;
-  public static final int FLOAT = 272;
-  public static final int STRING = 273;
-  public static final int IDENTIFIER = 274;
-  public static final int AND = 275;
+  public static final int AND = 265;
+  public static final int LT = 266;
+  public static final int LE = 267;
+  public static final int GT = 268;
+  public static final int GE = 269;
+  public static final int EQ = 270;
+  public static final int NE = 271;
+  public static final int INT = 272;
+  public static final int FLOAT = 273;
+  public static final int STRING = 274;
+  public static final int IDENTIFIER = 275;
   public static final int yyErrorCode = 256;
 
   /** number of final state.
@@ -65,16 +72,16 @@ public class Parser {
     30,
     }, yySindex = {
 //yySindex 50
-  -240,  -254,  -260,  -259,   -41,     0,   -36,   -35,   -34,   -33,
-   -19,     0,     0,     0,   -37,     0,     0,     0,     0,   -40,
-  -256,   -41,     0,     0,     0,   -39,     0,   -41,  -246,   -30,
-     0,  -257,  -245,     0,     0,     0,     0,     0,     0,     0,
+  -243,  -254,  -260,  -253,   -41,     0,   -38,   -36,   -35,   -34,
+   -20,     0,     0,     0,   -37,     0,     0,     0,     0,   -40,
+  -248,   -41,     0,     0,     0,   -39,     0,   -41,  -247,   -30,
+     0,  -258,  -235,     0,     0,     0,     0,     0,     0,     0,
      0,     0,   -42,   -41,     0,     0,     0,     0,     0,     0,
     }, yyRindex = {
 //yyRindex 50
      0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-   -28,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-     0,     0,     0,     0,     0,   -27,     0,     0,     0,     0,
+   -27,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+     0,     0,     0,     0,     0,   -28,     0,     0,     0,     0,
      0,     0,   -26,     0,     0,     0,     0,     0,     0,     0,
      0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
     }, yyGindex = {
@@ -82,11 +89,11 @@ public class Parser {
      0,     0,     0,     0,    15,    -1,     0,     0,     0,    -8,
      0,
     }, yyTable = {
-//yyTable 248
+//yyTable 245
     11,    11,    11,    13,     6,    28,     7,    21,    36,    37,
-    38,    39,    40,    41,     8,     9,    10,     1,    24,     2,
-    26,     3,     4,    15,    16,    17,    18,    19,    34,    35,
-    43,    10,    29,    14,    23,    49,     0,     0,     0,     0,
+    38,    39,    40,    41,     1,     8,     2,    10,     3,     4,
+    26,    15,     9,    16,    17,    18,    19,    24,    34,    35,
+    43,    29,    10,    14,    23,    49,     0,     0,     0,     0,
      0,    48,     0,     0,     0,     0,     0,     0,     0,     0,
      0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
      0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
@@ -105,15 +112,15 @@ public class Parser {
      0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
      0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
      0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-     0,     0,     0,     0,     0,    27,    20,     0,     0,    44,
-    45,    46,    10,    10,    22,    10,     0,    10,    10,    10,
-    10,    10,    10,     0,     0,     0,     0,    10,
+     0,     0,     0,     0,     0,    27,    20,     0,     0,     0,
+    44,    45,    46,    10,    10,    22,    10,     0,    10,    10,
+    10,    10,    10,    10,    10,
     }, yyCheck = {
-//yyCheck 248
-    42,    42,    42,     4,   258,    44,   260,    44,   265,   266,
-   267,   268,   269,   270,   274,   274,    44,   257,   274,   259,
-    21,   261,   262,    59,    59,    59,    59,    46,   274,    59,
-   275,    59,    59,    59,    19,    43,    -1,    -1,    -1,    -1,
+//yyCheck 245
+    42,    42,    42,     4,   258,    44,   260,    44,   266,   267,
+   268,   269,   270,   271,   257,   275,   259,    44,   261,   262,
+    21,    59,   275,    59,    59,    59,    46,   275,   275,    59,
+   265,    59,    59,    59,    19,    43,    -1,    -1,    -1,    -1,
     -1,    42,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
     -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
     -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
@@ -132,9 +139,9 @@ public class Parser {
     -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
     -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
     -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-    -1,    -1,    -1,    -1,    -1,   264,   263,    -1,    -1,   271,
-   272,   273,   274,   274,   274,   263,    -1,   265,   266,   267,
-   268,   269,   270,    -1,    -1,    -1,    -1,   275,
+    -1,    -1,    -1,    -1,    -1,   264,   263,    -1,    -1,    -1,
+   272,   273,   274,   275,   275,   275,   263,    -1,   265,   266,
+   267,   268,   269,   270,   271,
     };
 
   /** maps symbol value to printable name.
@@ -160,8 +167,8 @@ public class Parser {
     null,null,null,null,null,null,null,null,null,null,null,null,null,null,
     null,null,null,null,null,null,null,null,null,null,null,null,null,null,
     null,null,null,null,null,null,null,null,null,"SHOW","DATABASES","USE",
-    "TABLES","DESC","SELECT","FROM","WHERE","LT","LE","GT","GE","EQ","NE",
-    "INT","FLOAT","STRING","IDENTIFIER","AND",
+    "TABLES","DESC","SELECT","FROM","WHERE","AND","LT","LE","GT","GE",
+    "EQ","NE","INT","FLOAT","STRING","IDENTIFIER",
     };
 
 //t  /** printable rules for debugging.
@@ -416,182 +423,182 @@ public class Parser {
         yyVal = yyDefault(yyV > yyTop ? null : yyVals[yyV]);
         switch (yyN) {
 case 1:
-					// line 37 "src/main/java/com/ripple/frontend/Parser.jay"
+					// line 44 "src/main/java/com/ripple/frontend/Parser.jay"
   {
-    System.out.println("[RUN] show databases");
+    manager.showDatabases();
   }
   break;
 case 2:
-					// line 41 "src/main/java/com/ripple/frontend/Parser.jay"
+					// line 48 "src/main/java/com/ripple/frontend/Parser.jay"
   {
-    System.out.println("[RUN] use " + ((String)yyVals[-1+yyTop]));
+    manager.activeDatabase(((String)yyVals[-1+yyTop]));
   }
   break;
 case 3:
-					// line 45 "src/main/java/com/ripple/frontend/Parser.jay"
+					// line 52 "src/main/java/com/ripple/frontend/Parser.jay"
   {
-    System.out.println("[RUN] show tables");
+    manager.showRelations();
   }
   break;
 case 4:
-					// line 49 "src/main/java/com/ripple/frontend/Parser.jay"
+					// line 56 "src/main/java/com/ripple/frontend/Parser.jay"
   {
-    System.out.println("[RUN] desc " + ((String)yyVals[-1+yyTop]));
+    manager.descRelation(((String)yyVals[-1+yyTop]));
   }
   break;
 case 5:
-					// line 53 "src/main/java/com/ripple/frontend/Parser.jay"
+					// line 60 "src/main/java/com/ripple/frontend/Parser.jay"
   {
-    System.out.println("[RUN] select");
+    manager.select(((List<Attribute>)yyVals[-4+yyTop]), ((List<String>)yyVals[-2+yyTop]), ((List<Condition>)yyVals[-1+yyTop]));
   }
   break;
 case 6:
-					// line 59 "src/main/java/com/ripple/frontend/Parser.jay"
+					// line 66 "src/main/java/com/ripple/frontend/Parser.jay"
   {
     ((List<Attribute>)yyVal).add(((Attribute)yyVals[0+yyTop]));
   }
   break;
 case 7:
-					// line 63 "src/main/java/com/ripple/frontend/Parser.jay"
+					// line 70 "src/main/java/com/ripple/frontend/Parser.jay"
   {
     yyVal = new ArrayList<>();
     ((List<Attribute>)yyVal).add(((Attribute)yyVals[0+yyTop]));
   }
   break;
 case 8:
-					// line 70 "src/main/java/com/ripple/frontend/Parser.jay"
+					// line 77 "src/main/java/com/ripple/frontend/Parser.jay"
   {
     yyVal = new Attribute(((String)yyVals[-2+yyTop]), ((String)yyVals[0+yyTop]));
   }
   break;
 case 9:
-					// line 74 "src/main/java/com/ripple/frontend/Parser.jay"
+					// line 81 "src/main/java/com/ripple/frontend/Parser.jay"
   {
     yyVal = new Attribute(((String)yyVals[0+yyTop]));
   }
   break;
 case 10:
-					// line 80 "src/main/java/com/ripple/frontend/Parser.jay"
+					// line 87 "src/main/java/com/ripple/frontend/Parser.jay"
   {
     yyVal = ((String)yyVals[0+yyTop]);
   }
   break;
 case 11:
-					// line 84 "src/main/java/com/ripple/frontend/Parser.jay"
+					// line 91 "src/main/java/com/ripple/frontend/Parser.jay"
   {
     yyVal = "*";
   }
   break;
 case 12:
-					// line 90 "src/main/java/com/ripple/frontend/Parser.jay"
+					// line 97 "src/main/java/com/ripple/frontend/Parser.jay"
   {
     ((List<String>)yyVal).add(((String)yyVals[0+yyTop]));
   }
   break;
 case 13:
-					// line 94 "src/main/java/com/ripple/frontend/Parser.jay"
+					// line 101 "src/main/java/com/ripple/frontend/Parser.jay"
   {
     yyVal = new ArrayList<>();
     ((List<String>)yyVal).add(((String)yyVals[0+yyTop]));
   }
   break;
 case 14:
-					// line 102 "src/main/java/com/ripple/frontend/Parser.jay"
+					// line 109 "src/main/java/com/ripple/frontend/Parser.jay"
   {
     yyVal = ((List<Condition>)yyVals[0+yyTop]);
   }
   break;
 case 15:
-					// line 106 "src/main/java/com/ripple/frontend/Parser.jay"
+					// line 113 "src/main/java/com/ripple/frontend/Parser.jay"
   {
     yyVal = new ArrayList<>();
   }
   break;
 case 16:
-					// line 112 "src/main/java/com/ripple/frontend/Parser.jay"
+					// line 119 "src/main/java/com/ripple/frontend/Parser.jay"
   {
     ((List<Condition>)yyVal).add(((Condition)yyVals[0+yyTop]));
   }
   break;
 case 17:
-					// line 116 "src/main/java/com/ripple/frontend/Parser.jay"
+					// line 123 "src/main/java/com/ripple/frontend/Parser.jay"
   {
     yyVal = new ArrayList<>();
     ((List<Condition>)yyVal).add(((Condition)yyVals[0+yyTop]));
   }
   break;
 case 18:
-					// line 123 "src/main/java/com/ripple/frontend/Parser.jay"
+					// line 130 "src/main/java/com/ripple/frontend/Parser.jay"
   {
     yyVal = new Condition(((Attribute)yyVals[-2+yyTop]), ((Operator)yyVals[-1+yyTop]), ((Attribute)yyVals[0+yyTop]));
   }
   break;
 case 19:
-					// line 127 "src/main/java/com/ripple/frontend/Parser.jay"
+					// line 134 "src/main/java/com/ripple/frontend/Parser.jay"
   {
     yyVal = new Condition(((Attribute)yyVals[-2+yyTop]), ((Operator)yyVals[-1+yyTop]), ((Value)yyVals[0+yyTop]));
   }
   break;
 case 20:
-					// line 133 "src/main/java/com/ripple/frontend/Parser.jay"
+					// line 140 "src/main/java/com/ripple/frontend/Parser.jay"
   {
     yyVal = new StringValue(((String)yyVals[0+yyTop]));
   }
   break;
 case 21:
-					// line 137 "src/main/java/com/ripple/frontend/Parser.jay"
+					// line 144 "src/main/java/com/ripple/frontend/Parser.jay"
   {
     yyVal = new IntValue(((String)yyVals[0+yyTop]));
   }
   break;
 case 22:
-					// line 141 "src/main/java/com/ripple/frontend/Parser.jay"
+					// line 148 "src/main/java/com/ripple/frontend/Parser.jay"
   {
     yyVal = new FloatValue(((String)yyVals[0+yyTop]));
   }
   break;
 case 23:
-					// line 147 "src/main/java/com/ripple/frontend/Parser.jay"
+					// line 154 "src/main/java/com/ripple/frontend/Parser.jay"
   {
     yyVal = Operator.ltOp;
   }
   break;
 case 24:
-					// line 151 "src/main/java/com/ripple/frontend/Parser.jay"
+					// line 158 "src/main/java/com/ripple/frontend/Parser.jay"
   {
     yyVal = Operator.leOp;
   }
   break;
 case 25:
-					// line 155 "src/main/java/com/ripple/frontend/Parser.jay"
+					// line 162 "src/main/java/com/ripple/frontend/Parser.jay"
   {
     yyVal = Operator.gtOp;
   }
   break;
 case 26:
-					// line 159 "src/main/java/com/ripple/frontend/Parser.jay"
+					// line 166 "src/main/java/com/ripple/frontend/Parser.jay"
   {
     yyVal = Operator.geOp;
   }
   break;
 case 27:
-					// line 163 "src/main/java/com/ripple/frontend/Parser.jay"
+					// line 170 "src/main/java/com/ripple/frontend/Parser.jay"
   {
     yyVal = Operator.eqOp;
   }
   break;
 case 28:
-					// line 167 "src/main/java/com/ripple/frontend/Parser.jay"
+					// line 174 "src/main/java/com/ripple/frontend/Parser.jay"
   {
     yyVal = Operator.neOp;
   }
   break;
 case 29:
-					// line 173 "src/main/java/com/ripple/frontend/Parser.jay"
+					// line 180 "src/main/java/com/ripple/frontend/Parser.jay"
   {
   }
   break;
-					// line 596 "-"
+					// line 603 "-"
         }
         yyTop -= yyLen[yyN];
         yyState = yyStates[yyTop];
@@ -621,24 +628,7 @@ case 29:
     }
   }
 
-					// line 177 "src/main/java/com/ripple/frontend/Parser.jay"
-
-  public static void main(String args[]) throws Exception {
-    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-    while (true) {
-      System.out.print("RippleSQL >> ");
-      String line = reader.readLine();
-      if (line.equals("quit;")) break;
-      Lexer lexer = new Lexer(new StringReader(line));
-      Parser parser = new Parser();
-      try {
-        parser.yyparse(lexer);
-      } catch (RuntimeException e) {
-        System.out.println(e.getMessage());
-      } catch (Exception e) {
-      }
-    }
-  }
+					// line 184 "src/main/java/com/ripple/frontend/Parser.jay"
 
 } // closing brace for the parser class
-      					// line 646 "-"
+      					// line 636 "-"

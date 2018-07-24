@@ -1,13 +1,20 @@
 %{
 package com.ripple.frontend;
 
-import java.io.*;
-import java.util.*;
+import com.ripple.database.*;
 import com.ripple.operator.*;
-import com.ripple.relation.*;
+import com.ripple.query.*;
 import com.ripple.value.*;
 
+import java.util.*;
+
 public class Parser {
+
+  private QueryManager manager;
+
+  public Parser(QueryManager m) {
+    manager = m;
+  }
 
 %}
 
@@ -35,23 +42,23 @@ public class Parser {
 command
   : SHOW DATABASES ';'
   {
-    System.out.println("[RUN] show databases");
+    manager.showDatabases();
   }
   | USE IDENTIFIER ';'
   {
-    System.out.println("[RUN] use " + $2);
+    manager.activeDatabase($2);
   }
   | SHOW TABLES ';'
   {
-    System.out.println("[RUN] show tables");
+    manager.showRelations();
   }
   | DESC IDENTIFIER ';'
   {
-    System.out.println("[RUN] desc " + $2);
+    manager.descRelation($2);
   }
   | SELECT attr_list FROM relation_list opt_where_clause ';'
   {
-    System.out.println("[RUN] select");
+    manager.select($2, $4, $5);
   }
 
 attr_list
@@ -174,22 +181,5 @@ nothing
   }
 
 %%
-
-  public static void main(String args[]) throws Exception {
-    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-    while (true) {
-      System.out.print("RippleSQL >> ");
-      String line = reader.readLine();
-      if (line.equals("quit;")) break;
-      Lexer lexer = new Lexer(new StringReader(line));
-      Parser parser = new Parser();
-      try {
-        parser.yyparse(lexer);
-      } catch (RuntimeException e) {
-        System.out.println(e.getMessage());
-      } catch (Exception e) {
-      }
-    }
-  }
 
 } // closing brace for the parser class

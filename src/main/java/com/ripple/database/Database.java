@@ -2,6 +2,7 @@ package com.ripple.database;
 
 import com.ripple.util.Pair;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,10 @@ public class Database {
 
     public String getName() {
         return name;
+    }
+
+    public List<String> getRelationNames() {
+        return new ArrayList<>(relationMap.keySet());
     }
 
     public Map<String, Relation> checkRelations(final List<String> relationNames) {
@@ -58,7 +63,7 @@ public class Database {
         return attributes;
     }
 
-    private Relation getRelation(String relName) {
+    public Relation getRelation(String relName) {
         if (!relationMap.containsKey(relName))
             throw new RuntimeException(String.format("No Such Relation(%s) in Database(%s)!!!", relName, name));
         return relationMap.get(relName);
