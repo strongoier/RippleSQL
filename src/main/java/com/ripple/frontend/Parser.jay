@@ -1,0 +1,195 @@
+%{
+package com.ripple.frontend;
+
+import java.io.*;
+import java.util.*;
+import com.ripple.operator.*;
+import com.ripple.relation.*;
+import com.ripple.value.*;
+
+public class Parser {
+
+%}
+
+%token SHOW DATABASES USE TABLES DESC SELECT FROM WHERE AND
+%token LT LE GT GE EQ NE
+%token <String> INT
+%token <String> FLOAT
+%token <String> STRING
+%token <String> IDENTIFIER
+
+%type <Value> value
+%type <Operator> op
+%type <List<String>> relation_list
+%type <String> attr_name
+%type <Attribute> attr
+%type <List<Attribute>> attr_list
+%type <List<Condition>> opt_where_clause
+%type <List<Condition>> cond_list
+%type <Condition> cond
+
+%start command
+
+%%
+
+command
+  : SHOW DATABASES ';'
+  {
+    System.out.println("[RUN] show databases");
+  }
+  | USE IDENTIFIER ';'
+  {
+    System.out.println("[RUN] use " + $2);
+  }
+  | SHOW TABLES ';'
+  {
+    System.out.println("[RUN] show tables");
+  }
+  | DESC IDENTIFIER ';'
+  {
+    System.out.println("[RUN] desc " + $2);
+  }
+  | SELECT attr_list FROM relation_list opt_where_clause ';'
+  {
+    System.out.println("[RUN] select");
+  }
+
+attr_list
+  : attr_list ',' attr
+  {
+    $<List<Attribute>>$.add($3);
+  }
+  | attr
+  {
+    $$ = new ArrayList<>();
+    $<List<Attribute>>$.add($1);
+  }
+
+attr
+  : IDENTIFIER '.' attr_name
+  {
+    $$ = new Attribute($1, $3);
+  }
+  | attr_name
+  {
+    $$ = new Attribute($1);
+  }
+
+attr_name
+  : IDENTIFIER
+  {
+    $$ = $1;
+  }
+  | '*'
+  {
+    $$ = "*";
+  }
+
+relation_list
+  : relation_list ',' IDENTIFIER
+  {
+    $<List<String>>$.add($3);
+  }
+  | IDENTIFIER
+  {
+    $$ = new ArrayList<>();
+    $<List<String>>$.add($1);
+  }
+
+
+opt_where_clause
+  : WHERE cond_list
+  {
+    $$ = $2;
+  }
+  | nothing
+  {
+    $$ = new ArrayList<>();
+  }
+
+cond_list
+  : cond_list AND cond
+  {
+    $<List<Condition>>$.add($3);
+  }
+  | cond
+  {
+    $$ = new ArrayList<>();
+    $<List<Condition>>$.add($1);
+  }
+
+cond
+  : attr op attr
+  {
+    $$ = new Condition($1, $2, $3);
+  }
+  | attr op value
+  {
+    $$ = new Condition($1, $2, $3);
+  }
+
+value
+  : STRING
+  {
+    $$ = new StringValue($1);
+  }
+  | INT
+  {
+    $$ = new IntValue($1);
+  }
+  | FLOAT
+  {
+    $$ = new FloatValue($1);
+  }
+
+op
+  : LT
+  {
+    $$ = Operator.ltOp;
+  }
+  | LE
+  {
+    $$ = Operator.leOp;
+  }
+  | GT
+  {
+    $$ = Operator.gtOp;
+  }
+  | GE
+  {
+    $$ = Operator.geOp;
+  }
+  | EQ
+  {
+    $$ = Operator.eqOp;
+  }
+  | NE
+  {
+    $$ = Operator.neOp;
+  }
+
+nothing
+  : /* epsilon */
+  {
+  }
+
+%%
+
+  public static void main(String args[]) throws Exception {
+    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    while (true) {
+      System.out.print("RippleSQL >> ");
+      String line = reader.readLine();
+      if (line.equals("quit;")) break;
+      Lexer lexer = new Lexer(new StringReader(line));
+      Parser parser = new Parser();
+      try {
+        parser.yyparse(lexer);
+      } catch (RuntimeException e) {
+        System.out.println(e.getMessage());
+      } catch (Exception e) {
+      }
+    }
+  }
+
+} // closing brace for the parser class
