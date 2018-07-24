@@ -1,26 +1,26 @@
 package com.ripple.database;
 
-import com.ripple.operator.Operator;
+import com.ripple.algooperator.AlgoOperator;
 import com.ripple.value.Value;
 
 public class Condition {
     private Attribute leftAttribute;
-    private Operator operator;
+    private AlgoOperator algoOperator;
     private boolean rightIsAttribute;
     private Attribute rightAttribute;
     private Value rightValue;
 
-    public Condition(Attribute lattr, Operator op, Attribute rattr) {
+    public Condition(Attribute lattr, AlgoOperator op, Attribute rattr) {
         leftAttribute = lattr;
-        operator = op;
+        algoOperator = op;
         rightIsAttribute = true;
         rightAttribute = rattr;
         rightValue = null;
     }
 
-    public Condition(Attribute lattr, Operator op, Value rv) {
+    public Condition(Attribute lattr, AlgoOperator op, Value rv) {
         leftAttribute = lattr;
-        operator = op;
+        algoOperator = op;
         rightIsAttribute = false;
         rightAttribute = null;
         rightValue = rv;
@@ -30,8 +30,8 @@ public class Condition {
         return leftAttribute;
     }
 
-    public Operator getOperator() {
-        return operator;
+    public AlgoOperator getAlgoOperator() {
+        return algoOperator;
     }
 
     public boolean isRightIsAttribute() {

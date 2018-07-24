@@ -6,8 +6,8 @@ package com.ripple.frontend;
 
 import java.io.*;
 import java.util.*;
-import com.ripple.operator.*;
-import com.ripple.relation.*;
+import com.ripple.algooperator.*;
+import com.ripple.database.*;
 import com.ripple.value.*;
 
 public class Parser {
@@ -523,13 +523,13 @@ case 17:
 case 18:
 					// line 123 "src/main/java/com/ripple/frontend/Parser.jay"
   {
-    yyVal = new Condition(((Attribute)yyVals[-2+yyTop]), ((Operator)yyVals[-1+yyTop]), ((Attribute)yyVals[0+yyTop]));
+    yyVal = new Condition(((Attribute)yyVals[-2+yyTop]), ((AlgoOperator)yyVals[-1+yyTop]), ((Attribute)yyVals[0+yyTop]));
   }
   break;
 case 19:
 					// line 127 "src/main/java/com/ripple/frontend/Parser.jay"
   {
-    yyVal = new Condition(((Attribute)yyVals[-2+yyTop]), ((Operator)yyVals[-1+yyTop]), ((Value)yyVals[0+yyTop]));
+    yyVal = new Condition(((Attribute)yyVals[-2+yyTop]), ((AlgoOperator)yyVals[-1+yyTop]), ((Value)yyVals[0+yyTop]));
   }
   break;
 case 20:
@@ -553,37 +553,37 @@ case 22:
 case 23:
 					// line 147 "src/main/java/com/ripple/frontend/Parser.jay"
   {
-    yyVal = Operator.ltOp;
+    yyVal = AlgoOperator.ltOp;
   }
   break;
 case 24:
 					// line 151 "src/main/java/com/ripple/frontend/Parser.jay"
   {
-    yyVal = Operator.leOp;
+    yyVal = AlgoOperator.leOp;
   }
   break;
 case 25:
 					// line 155 "src/main/java/com/ripple/frontend/Parser.jay"
   {
-    yyVal = Operator.gtOp;
+    yyVal = AlgoOperator.gtOp;
   }
   break;
 case 26:
 					// line 159 "src/main/java/com/ripple/frontend/Parser.jay"
   {
-    yyVal = Operator.geOp;
+    yyVal = AlgoOperator.geOp;
   }
   break;
 case 27:
 					// line 163 "src/main/java/com/ripple/frontend/Parser.jay"
   {
-    yyVal = Operator.eqOp;
+    yyVal = AlgoOperator.eqOp;
   }
   break;
 case 28:
 					// line 167 "src/main/java/com/ripple/frontend/Parser.jay"
   {
-    yyVal = Operator.neOp;
+    yyVal = AlgoOperator.neOp;
   }
   break;
 case 29:

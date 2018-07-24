@@ -56,4 +56,14 @@ public class Attribute {
         builder.append(relationName).append(' ').append(attributeName).append(' ').append(index).append(' ').append(type);
         return builder.toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Attribute))
+            return false;
+        Attribute attr = (Attribute) o;
+        if (relationName.equals(attr.relationName) && attributeName.equals(attr.attributeName) && type.equals(attr.type))
+            return true;
+        return false;
+    }
 }
