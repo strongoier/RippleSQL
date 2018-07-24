@@ -1,4 +1,4 @@
-package com.ripple.relation;
+package com.ripple.database;
 
 import com.ripple.operator.Operator;
 import com.ripple.value.Value;

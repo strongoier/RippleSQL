@@ -1,24 +1,62 @@
 {
-  "relations": [
+  "databases": [
     {
-      "name": "click.db",
-      "attributes": [
-        "String",
-        "String",
-        "String",
-        "Float",
-        "String"
-      ]
-    },
-    {
-      "name": "hover.db",
-      "attributes": [
-        "String",
-        "String",
-        "String",
-        "Float",
-        "String",
-        "String"
+      "name": "default",
+      "relations": [
+        {
+          "name": "click.db",
+          "attributes": [
+            {
+              "name": "query_id",
+              "type": "String"
+            },
+            {
+              "name": "user_id",
+              "type": "String"
+            },
+            {
+              "name": "query",
+              "type": "String"
+            },
+            {
+              "name": "timestamp",
+              "type": "Float"
+            },
+            {
+              "name": "image_id",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "name": "hover.db",
+          "attributes": [
+            {
+              "name": "query_id",
+              "type": "String"
+            },
+            {
+              "name": "user_id",
+              "type": "String"
+            },
+            {
+              "name": "query",
+              "type": "String"
+            },
+            {
+              "name": "timestamp",
+              "type": "Float"
+            },
+            {
+              "name": "direction",
+              "type": "String"
+            },
+            {
+              "name": "image_id",
+              "type": "String"
+            }
+          ]
+        }
       ]
     }
   ]
