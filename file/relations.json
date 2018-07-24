@@ -4,7 +4,7 @@
       "name": "default",
       "relations": [
         {
-          "name": "click.db",
+          "name": "click",
           "attributes": [
             {
               "name": "query_id",
@@ -29,7 +29,7 @@
           ]
         },
         {
-          "name": "hover.db",
+          "name": "hover",
           "attributes": [
             {
               "name": "query_id",

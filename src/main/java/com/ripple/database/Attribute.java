@@ -53,7 +53,8 @@ public class Attribute {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append(relationName).append(' ').append(attributeName).append(' ').append(index).append(' ').append(type);
+        String typeString = type.toString();
+        builder.append(index).append(": ").append(attributeName).append(' ').append(typeString.substring(typeString.lastIndexOf('.') + 1));
         return builder.toString();
     }
 

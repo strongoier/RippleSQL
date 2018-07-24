@@ -29,6 +29,13 @@ public class QueryManager {
         databaseMap = configReader.getDatabases();
     }
 
+    public void showDatabases() {
+        checkDatabaseMap();
+        for (String name : databaseMap.keySet()) {
+            System.out.println(name);
+        }
+    }
+
     public void activeDatabase(String databaseName) {
         checkDatabaseMap();
         if (databaseName == null) {
@@ -38,6 +45,18 @@ public class QueryManager {
         if (!databaseMap.containsKey(databaseName))
             throw new RuntimeException(String.format("No Such Database(%s)!!!", databaseName));
         activeDatabase = databaseMap.get(databaseName);
+    }
+
+    public void showRelations() {
+        checkActiveDatabase();
+        for (String name : activeDatabase.getRelationNames()) {
+            System.out.println(name);
+        }
+    }
+
+    public void descRelation(String relationName) {
+        checkActiveDatabase();
+        System.out.println(activeDatabase.getRelation(relationName));
     }
 
     public void select(List<Attribute> attrs, List<String> rels, List<Condition> conds) {

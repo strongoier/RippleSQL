@@ -32,9 +32,16 @@ public class Relation {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("name:\n\t").append(name).append("\nattributeMap:\n");
-        for (Attribute attribute : attributeMap.values())
-            builder.append('\t').append(attribute).append('\n');
+        List<Attribute> attributes = new ArrayList<>(attributeMap.values());
+        Collections.sort(attributes, new Comparator<Attribute>() {
+            @Override
+            public int compare(Attribute o1, Attribute o2) {
+                return o1.getIndex() - o2.getIndex();
+            }
+        });
+        for (Attribute attribute : attributes) {
+            builder.append(attribute).append('\n');
+        }
         return builder.toString();
     }
 
