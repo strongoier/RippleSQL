@@ -5,10 +5,22 @@ import com.ripple.database.Attribute;
 import com.ripple.database.Condition;
 import com.ripple.database.Database;
 import com.ripple.database.Relation;
+import com.ripple.mapreduce.TaskInfo;
+import com.ripple.sqloperator.NopReduceOperator;
+import com.ripple.sqloperator.SelectMapOperator;
+import com.ripple.util.TaskUtil;
+import org.apache.hadoop.mapreduce.Job;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class QueryManager {
     private ConfigReader configReader;
@@ -59,12 +71,49 @@ public class QueryManager {
         System.out.println(activeDatabase.getRelation(relationName));
     }
 
-    public void select(List<Attribute> attrs, List<String> rels, List<Condition> conds) {
+    public void select(List<Attribute> attrs, List<String> rels, List<Condition> conds) throws IOException {
         checkActiveDatabase();
 
-        Map<String, Relation> relations = activeDatabase.checkRelations(rels);
+        //Map<String, Relation> relations = activeDatabase.checkRelations(rels);
 
-        Map<Relation, Map<String, Attribute>> attributes = activeDatabase.checkAttributes(attrs, relations);
+        //Map<Relation, Map<String, Attribute>> attributes = activeDatabase.checkAttributes(attrs, relations);
+
+        //List<TaskInfo> taskInfos = new ArrayList<>();
+
+        Relation relation = activeDatabase.getRelation(rels.get(0));
+
+        attrs.forEach((a) -> {
+            if (a.getRelationName() == null)
+                a.setRelationName(relation.getName());
+        });
+
+        List<Attribute> attributes = attrs;
+
+        List<TaskInfo> infos = new ArrayList<>();
+        TaskInfo info = new TaskInfo();
+
+        List<Attribute> cur = relation.getAttributeMap().values().stream().sorted(Comparator.comparing(Attribute::getIndex)).collect(Collectors.toList());
+        SelectMapOperator selectMapOperator = new SelectMapOperator();
+        cur = selectMapOperator.setup(attributes, cur);
+        info.mapOperators.add(selectMapOperator);
+        NopReduceOperator nopReduceOperator = new NopReduceOperator();
+        cur = nopReduceOperator.setup(cur);
+        info.reduceOperator = nopReduceOperator;
+        info.inputPaths.add(getRelationPath(relation));
+        info.outputPath = "file/result";
+
+        infos.add(info);
+
+        TaskUtil.createJob(infos);
+
+        Path path = Paths.get("file/result/part-r-00000");
+        BufferedReader reader = Files.newBufferedReader(path);
+        String line = null;
+        while ((line = reader.readLine()) != null)
+            System.out.println(line);
+        reader.close();
+        Path dir = Paths.get("file/result");
+        Files.delete(dir);
     }
 
     private void checkConfigReader() {
@@ -82,5 +131,9 @@ public class QueryManager {
         checkDatabaseMap();
         if (activeDatabase == null)
             throw new RuntimeException("Need Active Database!!!");
+    }
+
+    private String getRelationPath(Relation relation) {
+        return "file/" + activeDatabase.getName() + "/" + relation.getName();
     }
 }

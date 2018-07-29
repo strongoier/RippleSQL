@@ -384,11 +384,11 @@ public class Parser {
             yyN = yyTable[yyN];			// reduce (yyN)
           else
             switch (yyErrorFlag) {
-
+  
             case 0:
               yyerror("syntax error", yyExpecting(yyState));
 //t              if (yydebug != null) yydebug.error("syntax error");
-
+  
             case 1: case 2:
               yyErrorFlag = 3;
               do {
@@ -405,7 +405,7 @@ public class Parser {
               } while (-- yyTop >= 0);
 //t              if (yydebug != null) yydebug.reject();
               throw new yyException("irrecoverable syntax error");
-
+  
             case 3:
               if (yyToken == 0) {
 //t                if (yydebug != null) yydebug.reject();

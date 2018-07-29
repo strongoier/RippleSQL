@@ -59,7 +59,10 @@ public class FormatOperator {
             for (Pair<Object, Text> pair : input) {
                 String line = pair.getValue().toString();
                 int i = line.indexOf('\t');
-                results.add(new Pair<>(new Text(line.substring(0, i)), new Text(line.substring(i + 1))));
+                if (i == -1 || i + 1 == line.length())
+                    results.add(new Pair<>(new Text(line.trim()), new Text("")));
+                else
+                    results.add(new Pair<>(new Text(line.substring(0, i)), new Text(line.substring(i + 1))));
             }
         }
         return results;

@@ -63,7 +63,7 @@ public class Attribute {
         if (!(o instanceof Attribute))
             return false;
         Attribute attr = (Attribute) o;
-        if (relationName.equals(attr.relationName) && attributeName.equals(attr.attributeName) && type.equals(attr.type))
+        if (relationName.equals(attr.relationName) && attributeName.equals(attr.attributeName))
             return true;
         return false;
     }

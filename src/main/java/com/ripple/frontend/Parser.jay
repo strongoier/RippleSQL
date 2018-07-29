@@ -2,7 +2,7 @@
 package com.ripple.frontend;
 
 import com.ripple.database.*;
-import com.ripple.operator.*;
+import com.ripple.algooperator.*;
 import com.ripple.query.*;
 import com.ripple.value.*;
 
@@ -26,7 +26,7 @@ public class Parser {
 %token <String> IDENTIFIER
 
 %type <Value> value
-%type <Operator> op
+%type <AlgoOperator> op
 %type <List<String>> relation_list
 %type <String> attr_name
 %type <Attribute> attr
@@ -152,27 +152,27 @@ value
 op
   : LT
   {
-    $$ = Operator.ltOp;
+    $$ = AlgoOperator.ltOp;
   }
   | LE
   {
-    $$ = Operator.leOp;
+    $$ = AlgoOperator.leOp;
   }
   | GT
   {
-    $$ = Operator.gtOp;
+    $$ = AlgoOperator.gtOp;
   }
   | GE
   {
-    $$ = Operator.geOp;
+    $$ = AlgoOperator.geOp;
   }
   | EQ
   {
-    $$ = Operator.eqOp;
+    $$ = AlgoOperator.eqOp;
   }
   | NE
   {
-    $$ = Operator.neOp;
+    $$ = AlgoOperator.neOp;
   }
 
 nothing

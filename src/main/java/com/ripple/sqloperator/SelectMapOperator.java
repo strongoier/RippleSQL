@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SelectMapOperator extends MapOperator {
-    private List<Integer> indexs = null;
+    private List<Integer> indexs = new ArrayList<>();
 
     @Override
     public String toString() {
