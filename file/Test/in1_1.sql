@@ -1,0 +1,2 @@
+use Sky;
+select Galaxy.objID, max(SpecLine.ew), sum(SpecLine.ew), avg(SpecLine.ew), min(SpecLine.ew), count(SpecLine.ew) from Galaxy, SpecObj, SpecLine, SpecLineNames where Galaxy.objID = SpecObj.objID and SpecObj.specObjID = SpecLine.specObjID and SpecLine.lineId = SpecLineNames.value and SpecLineNames.name = "Ha_6565" group by Galaxy.objID;

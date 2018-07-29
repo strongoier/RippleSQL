@@ -1,58 +1,3289 @@
 {
   "databases": [
     {
-      "name": "default",
+      "name": "Sky",
       "relations": [
         {
-          "name": "click",
+          "name": "Galaxy",
           "attributes": [
             {
-              "name": "query_id",
-              "type": "String"
+              "name": "objID",
+              "type": "Int"
             },
             {
-              "name": "user_id",
-              "type": "String"
+              "name": "run",
+              "type": "Int"
             },
             {
-              "name": "query",
-              "type": "String"
+              "name": "rerun",
+              "type": "Int"
             },
             {
-              "name": "timestamp",
+              "name": "camcol",
+              "type": "Int"
+            },
+            {
+              "name": "field",
+              "type": "Int"
+            },
+            {
+              "name": "obj",
+              "type": "Int"
+            },
+            {
+              "name": "mode",
+              "type": "Int"
+            },
+            {
+              "name": "nChild",
+              "type": "Int"
+            },
+            {
+              "name": "type",
+              "type": "Int"
+            },
+            {
+              "name": "catID",
+              "type": "Int"
+            },
+            {
+              "name": "flags",
+              "type": "Int"
+            },
+            {
+              "name": "rowc",
               "type": "Float"
             },
             {
-              "name": "image_id",
+              "name": "rowcErr",
+              "type": "Float"
+            },
+            {
+              "name": "colc",
+              "type": "Float"
+            },
+            {
+              "name": "colcErr",
+              "type": "Float"
+            },
+            {
+              "name": "rowv",
+              "type": "Float"
+            },
+            {
+              "name": "rowvErr",
+              "type": "Float"
+            },
+            {
+              "name": "colv",
+              "type": "Float"
+            },
+            {
+              "name": "colvErr",
+              "type": "Float"
+            },
+            {
+              "name": "rowc_u",
+              "type": "Float"
+            },
+            {
+              "name": "rowc_g",
+              "type": "Float"
+            },
+            {
+              "name": "rowc_r",
+              "type": "Float"
+            },
+            {
+              "name": "rowc_i",
+              "type": "Float"
+            },
+            {
+              "name": "rowc_z",
+              "type": "Float"
+            },
+            {
+              "name": "rowcErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "rowcErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "rowcErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "rowcErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "rowcErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "colc_u",
+              "type": "Float"
+            },
+            {
+              "name": "colc_g",
+              "type": "Float"
+            },
+            {
+              "name": "colc_r",
+              "type": "Float"
+            },
+            {
+              "name": "colc_i",
+              "type": "Float"
+            },
+            {
+              "name": "colc_z",
+              "type": "Float"
+            },
+            {
+              "name": "colcErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "colcErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "colcErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "colcErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "colcErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "sky_u",
+              "type": "Float"
+            },
+            {
+              "name": "sky_g",
+              "type": "Float"
+            },
+            {
+              "name": "sky_r",
+              "type": "Float"
+            },
+            {
+              "name": "sky_i",
+              "type": "Float"
+            },
+            {
+              "name": "sky_z",
+              "type": "Float"
+            },
+            {
+              "name": "skyErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "skyErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "skyErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "skyErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "skyErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "psfMag_u",
+              "type": "Float"
+            },
+            {
+              "name": "psfMag_g",
+              "type": "Float"
+            },
+            {
+              "name": "psfMag_r",
+              "type": "Float"
+            },
+            {
+              "name": "psfMag_i",
+              "type": "Float"
+            },
+            {
+              "name": "psfMag_z",
+              "type": "Float"
+            },
+            {
+              "name": "psfMagErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "psfMagErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "psfMagErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "psfMagErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "psfMagErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "fiberMag_u",
+              "type": "Float"
+            },
+            {
+              "name": "fiberMag_g",
+              "type": "Float"
+            },
+            {
+              "name": "fiberMag_r",
+              "type": "Float"
+            },
+            {
+              "name": "fiberMag_i",
+              "type": "Float"
+            },
+            {
+              "name": "fiberMag_z",
+              "type": "Float"
+            },
+            {
+              "name": "fiberMagErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "fiberMagErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "fiberMagErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "fiberMagErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "fiberMagErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "petroMag_u",
+              "type": "Float"
+            },
+            {
+              "name": "petroMag_g",
+              "type": "Float"
+            },
+            {
+              "name": "petroMag_r",
+              "type": "Float"
+            },
+            {
+              "name": "petroMag_i",
+              "type": "Float"
+            },
+            {
+              "name": "petroMag_z",
+              "type": "Float"
+            },
+            {
+              "name": "petroMagErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "petroMagErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "petroMagErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "petroMagErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "petroMagErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "petroRad_u",
+              "type": "Float"
+            },
+            {
+              "name": "petroRad_g",
+              "type": "Float"
+            },
+            {
+              "name": "petroRad_r",
+              "type": "Float"
+            },
+            {
+              "name": "petroRad_i",
+              "type": "Float"
+            },
+            {
+              "name": "petroRad_z",
+              "type": "Float"
+            },
+            {
+              "name": "petroRadErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "petroRadErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "petroRadErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "petroRadErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "petroRadErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "petroR50_u",
+              "type": "Float"
+            },
+            {
+              "name": "petroR50_g",
+              "type": "Float"
+            },
+            {
+              "name": "petroR50_r",
+              "type": "Float"
+            },
+            {
+              "name": "petroR50_i",
+              "type": "Float"
+            },
+            {
+              "name": "petroR50_z",
+              "type": "Float"
+            },
+            {
+              "name": "petroR50Err_u",
+              "type": "Float"
+            },
+            {
+              "name": "petroR50Err_g",
+              "type": "Float"
+            },
+            {
+              "name": "petroR50Err_r",
+              "type": "Float"
+            },
+            {
+              "name": "petroR50Err_i",
+              "type": "Float"
+            },
+            {
+              "name": "petroR50Err_z",
+              "type": "Float"
+            },
+            {
+              "name": "petroR90_u",
+              "type": "Float"
+            },
+            {
+              "name": "petroR90_g",
+              "type": "Float"
+            },
+            {
+              "name": "petroR90_r",
+              "type": "Float"
+            },
+            {
+              "name": "petroR90_i",
+              "type": "Float"
+            },
+            {
+              "name": "petroR90_z",
+              "type": "Float"
+            },
+            {
+              "name": "petroR90Err_u",
+              "type": "Float"
+            },
+            {
+              "name": "petroR90Err_g",
+              "type": "Float"
+            },
+            {
+              "name": "petroR90Err_r",
+              "type": "Float"
+            },
+            {
+              "name": "petroR90Err_i",
+              "type": "Float"
+            },
+            {
+              "name": "petroR90Err_z",
+              "type": "Float"
+            },
+            {
+              "name": "q_u",
+              "type": "Float"
+            },
+            {
+              "name": "q_g",
+              "type": "Float"
+            },
+            {
+              "name": "q_r",
+              "type": "Float"
+            },
+            {
+              "name": "q_i",
+              "type": "Float"
+            },
+            {
+              "name": "q_z",
+              "type": "Float"
+            },
+            {
+              "name": "qErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "qErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "qErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "qErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "qErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "u_u",
+              "type": "Float"
+            },
+            {
+              "name": "u_g",
+              "type": "Float"
+            },
+            {
+              "name": "u_r",
+              "type": "Float"
+            },
+            {
+              "name": "u_i",
+              "type": "Float"
+            },
+            {
+              "name": "u_z",
+              "type": "Float"
+            },
+            {
+              "name": "uErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "uErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "uErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "uErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "uErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "isoRowc_u",
+              "type": "Float"
+            },
+            {
+              "name": "isoRowc_g",
+              "type": "Float"
+            },
+            {
+              "name": "isoRowc_r",
+              "type": "Float"
+            },
+            {
+              "name": "isoRowc_i",
+              "type": "Float"
+            },
+            {
+              "name": "isoRowc_z",
+              "type": "Float"
+            },
+            {
+              "name": "isoRowcErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "isoRowcErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "isoRowcErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "isoRowcErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "isoRowcErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "isoRowcGrad_u",
+              "type": "Float"
+            },
+            {
+              "name": "isoRowcGrad_g",
+              "type": "Float"
+            },
+            {
+              "name": "isoRowcGrad_r",
+              "type": "Float"
+            },
+            {
+              "name": "isoRowcGrad_i",
+              "type": "Float"
+            },
+            {
+              "name": "isoRowcGrad_z",
+              "type": "Float"
+            },
+            {
+              "name": "isoColc_u",
+              "type": "Float"
+            },
+            {
+              "name": "isoColc_g",
+              "type": "Float"
+            },
+            {
+              "name": "isoColc_r",
+              "type": "Float"
+            },
+            {
+              "name": "isoColc_i",
+              "type": "Float"
+            },
+            {
+              "name": "isoColc_z",
+              "type": "Float"
+            },
+            {
+              "name": "isoColcErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "isoColcErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "isoColcErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "isoColcErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "isoColcErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "isoColcGrad_u",
+              "type": "Float"
+            },
+            {
+              "name": "isoColcGrad_g",
+              "type": "Float"
+            },
+            {
+              "name": "isoColcGrad_r",
+              "type": "Float"
+            },
+            {
+              "name": "isoColcGrad_i",
+              "type": "Float"
+            },
+            {
+              "name": "isoColcGrad_z",
+              "type": "Float"
+            },
+            {
+              "name": "isoA_u",
+              "type": "Float"
+            },
+            {
+              "name": "isoA_g",
+              "type": "Float"
+            },
+            {
+              "name": "isoA_r",
+              "type": "Float"
+            },
+            {
+              "name": "isoA_i",
+              "type": "Float"
+            },
+            {
+              "name": "isoA_z",
+              "type": "Float"
+            },
+            {
+              "name": "isoAErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "isoAErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "isoAErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "isoAErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "isoAErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "isoB_u",
+              "type": "Float"
+            },
+            {
+              "name": "isoB_g",
+              "type": "Float"
+            },
+            {
+              "name": "isoB_r",
+              "type": "Float"
+            },
+            {
+              "name": "isoB_i",
+              "type": "Float"
+            },
+            {
+              "name": "isoB_z",
+              "type": "Float"
+            },
+            {
+              "name": "isoBErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "isoBErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "isoBErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "isoBErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "isoBErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "isoAGrad_u",
+              "type": "Float"
+            },
+            {
+              "name": "isoAGrad_g",
+              "type": "Float"
+            },
+            {
+              "name": "isoAGrad_r",
+              "type": "Float"
+            },
+            {
+              "name": "isoAGrad_i",
+              "type": "Float"
+            },
+            {
+              "name": "isoAGrad_z",
+              "type": "Float"
+            },
+            {
+              "name": "isoBGrad_u",
+              "type": "Float"
+            },
+            {
+              "name": "isoBGrad_g",
+              "type": "Float"
+            },
+            {
+              "name": "isoBGrad_r",
+              "type": "Float"
+            },
+            {
+              "name": "isoBGrad_i",
+              "type": "Float"
+            },
+            {
+              "name": "isoBGrad_z",
+              "type": "Float"
+            },
+            {
+              "name": "isoPhi_u",
+              "type": "Float"
+            },
+            {
+              "name": "isoPhi_g",
+              "type": "Float"
+            },
+            {
+              "name": "isoPhi_r",
+              "type": "Float"
+            },
+            {
+              "name": "isoPhi_i",
+              "type": "Float"
+            },
+            {
+              "name": "isoPhi_z",
+              "type": "Float"
+            },
+            {
+              "name": "isoPhiErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "isoPhiErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "isoPhiErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "isoPhiErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "isoPhiErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "isoPhiGrad_u",
+              "type": "Float"
+            },
+            {
+              "name": "isoPhiGrad_g",
+              "type": "Float"
+            },
+            {
+              "name": "isoPhiGrad_r",
+              "type": "Float"
+            },
+            {
+              "name": "isoPhiGrad_i",
+              "type": "Float"
+            },
+            {
+              "name": "isoPhiGrad_z",
+              "type": "Float"
+            },
+            {
+              "name": "deVRad_u",
+              "type": "Float"
+            },
+            {
+              "name": "deVRad_g",
+              "type": "Float"
+            },
+            {
+              "name": "deVRad_r",
+              "type": "Float"
+            },
+            {
+              "name": "deVRad_i",
+              "type": "Float"
+            },
+            {
+              "name": "deVRad_z",
+              "type": "Float"
+            },
+            {
+              "name": "deVRadErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "deVRadErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "deVRadErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "deVRadErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "deVRadErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "deVAB_u",
+              "type": "Float"
+            },
+            {
+              "name": "deVAB_g",
+              "type": "Float"
+            },
+            {
+              "name": "deVAB_r",
+              "type": "Float"
+            },
+            {
+              "name": "deVAB_i",
+              "type": "Float"
+            },
+            {
+              "name": "deVAB_z",
+              "type": "Float"
+            },
+            {
+              "name": "deVABErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "deVABErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "deVABErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "deVABErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "deVABErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "deVPhi_u",
+              "type": "Float"
+            },
+            {
+              "name": "deVPhi_g",
+              "type": "Float"
+            },
+            {
+              "name": "deVPhi_r",
+              "type": "Float"
+            },
+            {
+              "name": "deVPhi_i",
+              "type": "Float"
+            },
+            {
+              "name": "deVPhi_z",
+              "type": "Float"
+            },
+            {
+              "name": "deVPhiErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "deVPhiErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "deVPhiErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "deVPhiErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "deVPhiErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "deVMag_u",
+              "type": "Float"
+            },
+            {
+              "name": "deVMag_g",
+              "type": "Float"
+            },
+            {
+              "name": "deVMag_r",
+              "type": "Float"
+            },
+            {
+              "name": "deVMag_i",
+              "type": "Float"
+            },
+            {
+              "name": "deVMag_z",
+              "type": "Float"
+            },
+            {
+              "name": "deVMagErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "deVMagErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "deVMagErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "deVMagErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "deVMagErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "expRad_u",
+              "type": "Float"
+            },
+            {
+              "name": "expRad_g",
+              "type": "Float"
+            },
+            {
+              "name": "expRad_r",
+              "type": "Float"
+            },
+            {
+              "name": "expRad_i",
+              "type": "Float"
+            },
+            {
+              "name": "expRad_z",
+              "type": "Float"
+            },
+            {
+              "name": "expRadErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "expRadErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "expRadErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "expRadErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "expRadErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "expAB_u",
+              "type": "Float"
+            },
+            {
+              "name": "expAB_g",
+              "type": "Float"
+            },
+            {
+              "name": "expAB_r",
+              "type": "Float"
+            },
+            {
+              "name": "expAB_i",
+              "type": "Float"
+            },
+            {
+              "name": "expAB_z",
+              "type": "Float"
+            },
+            {
+              "name": "expABErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "expABErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "expABErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "expABErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "expABErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "expPhi_u",
+              "type": "Float"
+            },
+            {
+              "name": "expPhi_g",
+              "type": "Float"
+            },
+            {
+              "name": "expPhi_r",
+              "type": "Float"
+            },
+            {
+              "name": "expPhi_i",
+              "type": "Float"
+            },
+            {
+              "name": "expPhi_z",
+              "type": "Float"
+            },
+            {
+              "name": "expPhiErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "expPhiErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "expPhiErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "expPhiErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "expPhiErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "expMag_u",
+              "type": "Float"
+            },
+            {
+              "name": "expMag_g",
+              "type": "Float"
+            },
+            {
+              "name": "expMag_r",
+              "type": "Float"
+            },
+            {
+              "name": "expMag_i",
+              "type": "Float"
+            },
+            {
+              "name": "expMag_z",
+              "type": "Float"
+            },
+            {
+              "name": "expMagErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "expMagErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "expMagErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "expMagErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "expMagErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "modelMag_u",
+              "type": "Float"
+            },
+            {
+              "name": "modelMag_g",
+              "type": "Float"
+            },
+            {
+              "name": "modelMag_r",
+              "type": "Float"
+            },
+            {
+              "name": "modelMag_i",
+              "type": "Float"
+            },
+            {
+              "name": "modelMag_z",
+              "type": "Float"
+            },
+            {
+              "name": "modelMagErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "modelMagErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "modelMagErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "modelMagErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "modelMagErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "texture_u",
+              "type": "Float"
+            },
+            {
+              "name": "texture_g",
+              "type": "Float"
+            },
+            {
+              "name": "texture_r",
+              "type": "Float"
+            },
+            {
+              "name": "texture_i",
+              "type": "Float"
+            },
+            {
+              "name": "texture_z",
+              "type": "Float"
+            },
+            {
+              "name": "lStar_u",
+              "type": "Float"
+            },
+            {
+              "name": "lStar_g",
+              "type": "Float"
+            },
+            {
+              "name": "lStar_r",
+              "type": "Float"
+            },
+            {
+              "name": "lStar_i",
+              "type": "Float"
+            },
+            {
+              "name": "lStar_z",
+              "type": "Float"
+            },
+            {
+              "name": "lExp_u",
+              "type": "Float"
+            },
+            {
+              "name": "lExp_g",
+              "type": "Float"
+            },
+            {
+              "name": "lExp_r",
+              "type": "Float"
+            },
+            {
+              "name": "lExp_i",
+              "type": "Float"
+            },
+            {
+              "name": "lExp_z",
+              "type": "Float"
+            },
+            {
+              "name": "lDeV_u",
+              "type": "Float"
+            },
+            {
+              "name": "lDeV_g",
+              "type": "Float"
+            },
+            {
+              "name": "lDeV_r",
+              "type": "Float"
+            },
+            {
+              "name": "lDeV_i",
+              "type": "Float"
+            },
+            {
+              "name": "lDeV_z",
+              "type": "Float"
+            },
+            {
+              "name": "fracPSF_u",
+              "type": "Float"
+            },
+            {
+              "name": "fracPSF_g",
+              "type": "Float"
+            },
+            {
+              "name": "fracPSF_r",
+              "type": "Float"
+            },
+            {
+              "name": "fracPSF_i",
+              "type": "Float"
+            },
+            {
+              "name": "fracPSF_z",
+              "type": "Float"
+            },
+            {
+              "name": "flags_u",
+              "type": "Int"
+            },
+            {
+              "name": "flags_g",
+              "type": "Int"
+            },
+            {
+              "name": "flags_r",
+              "type": "Int"
+            },
+            {
+              "name": "flags_i",
+              "type": "Int"
+            },
+            {
+              "name": "flags_z",
+              "type": "Int"
+            },
+            {
+              "name": "type_u",
+              "type": "Int"
+            },
+            {
+              "name": "type_g",
+              "type": "Int"
+            },
+            {
+              "name": "type_r",
+              "type": "Int"
+            },
+            {
+              "name": "type_i",
+              "type": "Int"
+            },
+            {
+              "name": "type_z",
+              "type": "Int"
+            },
+            {
+              "name": "status",
+              "type": "Int"
+            },
+            {
+              "name": "ra",
+              "type": "Float"
+            },
+            {
+              "name": "dec",
+              "type": "Float"
+            },
+            {
+              "name": "cx",
+              "type": "Float"
+            },
+            {
+              "name": "cy",
+              "type": "Float"
+            },
+            {
+              "name": "cz",
+              "type": "Float"
+            },
+            {
+              "name": "offsetRa_u",
+              "type": "Float"
+            },
+            {
+              "name": "offsetRa_g",
+              "type": "Float"
+            },
+            {
+              "name": "offsetRa_r",
+              "type": "Float"
+            },
+            {
+              "name": "offsetRa_i",
+              "type": "Float"
+            },
+            {
+              "name": "offsetRa_z",
+              "type": "Float"
+            },
+            {
+              "name": "offsetDec_u",
+              "type": "Float"
+            },
+            {
+              "name": "offsetDec_g",
+              "type": "Float"
+            },
+            {
+              "name": "offsetDec_r",
+              "type": "Float"
+            },
+            {
+              "name": "offsetDec_i",
+              "type": "Float"
+            },
+            {
+              "name": "offsetDec_z",
+              "type": "Float"
+            },
+            {
+              "name": "primTarget",
+              "type": "Int"
+            },
+            {
+              "name": "secTarget",
+              "type": "Int"
+            },
+            {
+              "name": "reddening_u",
+              "type": "Float"
+            },
+            {
+              "name": "reddening_g",
+              "type": "Float"
+            },
+            {
+              "name": "reddening_r",
+              "type": "Float"
+            },
+            {
+              "name": "reddening_i",
+              "type": "Float"
+            },
+            {
+              "name": "reddening_z",
+              "type": "Float"
+            },
+            {
+              "name": "priority",
+              "type": "Int"
+            },
+            {
+              "name": "rho",
+              "type": "Float"
+            },
+            {
+              "name": "htmID",
+              "type": "Int"
+            },
+            {
+              "name": "fieldID",
+              "type": "Int"
+            },
+            {
+              "name": "parentID",
+              "type": "String"
+            },
+            {
+              "name": "specObjID",
+              "type": "String"
+            },
+            {
+              "name": "u",
+              "type": "Float"
+            },
+            {
+              "name": "g",
+              "type": "Float"
+            },
+            {
+              "name": "r",
+              "type": "Float"
+            },
+            {
+              "name": "i",
+              "type": "Float"
+            },
+            {
+              "name": "z",
+              "type": "Float"
+            },
+            {
+              "name": "err_u",
+              "type": "Float"
+            },
+            {
+              "name": "err_g",
+              "type": "Float"
+            },
+            {
+              "name": "err_r",
+              "type": "Float"
+            },
+            {
+              "name": "err_i",
+              "type": "Float"
+            },
+            {
+              "name": "err_z",
+              "type": "Float"
+            },
+            {
+              "name": "insertTime",
               "type": "String"
             }
           ]
         },
         {
-          "name": "hover",
+          "name": "SpecLine",
           "attributes": [
             {
-              "name": "query_id",
-              "type": "String"
+              "name": "specLineID",
+              "type": "Int"
             },
             {
-              "name": "user_id",
-              "type": "String"
-            },
-            {
-              "name": "query",
-              "type": "String"
-            },
-            {
-              "name": "timestamp",
+              "name": "wave",
               "type": "Float"
             },
             {
-              "name": "direction",
+              "name": "waveErr",
+              "type": "Float"
+            },
+            {
+              "name": "waveMin",
+              "type": "Float"
+            },
+            {
+              "name": "waveMax",
+              "type": "Float"
+            },
+            {
+              "name": "sigma",
+              "type": "Float"
+            },
+            {
+              "name": "sigmaErr",
+              "type": "Float"
+            },
+            {
+              "name": "sigmaMin",
+              "type": "Float"
+            },
+            {
+              "name": "sigmaMax",
+              "type": "Float"
+            },
+            {
+              "name": "height",
+              "type": "Float"
+            },
+            {
+              "name": "heightErr",
+              "type": "Float"
+            },
+            {
+              "name": "continuum",
+              "type": "Float"
+            },
+            {
+              "name": "ew",
+              "type": "Float"
+            },
+            {
+              "name": "ewErr",
+              "type": "Float"
+            },
+            {
+              "name": "ewMin",
+              "type": "Float"
+            },
+            {
+              "name": "specIndex",
+              "type": "Float"
+            },
+            {
+              "name": "nSigma",
+              "type": "Float"
+            },
+            {
+              "name": "chisq",
+              "type": "Float"
+            },
+            {
+              "name": "nu",
+              "type": "Int"
+            },
+            {
+              "name": "restWave",
+              "type": "Float"
+            },
+            {
+              "name": "lineID",
+              "type": "Int"
+            },
+            {
+              "name": "weight",
+              "type": "Float"
+            },
+            {
+              "name": "z",
+              "type": "Float"
+            },
+            {
+              "name": "zErr",
+              "type": "Float"
+            },
+            {
+              "name": "lineMask",
+              "type": "Int"
+            },
+            {
+              "name": "category",
+              "type": "Int"
+            },
+            {
+              "name": "specObjID",
+              "type": "Int"
+            },
+            {
+              "name": "insertTime",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "name": "SpecLineNames",
+          "attributes": [
+            {
+              "name": "name",
               "type": "String"
             },
             {
-              "name": "image_id",
+              "name": "value",
+              "type": "Int"
+            },
+            {
+              "name": "description",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "name": "SpecObj",
+          "attributes": [
+            {
+              "name": "specObjID",
+              "type": "Int"
+            },
+            {
+              "name": "xFocal",
+              "type": "Float"
+            },
+            {
+              "name": "yFocal",
+              "type": "Float"
+            },
+            {
+              "name": "fiberID",
+              "type": "Int"
+            },
+            {
+              "name": "z",
+              "type": "Float"
+            },
+            {
+              "name": "zErr",
+              "type": "Float"
+            },
+            {
+              "name": "zConf",
+              "type": "Float"
+            },
+            {
+              "name": "zStatus",
+              "type": "Int"
+            },
+            {
+              "name": "specClass",
+              "type": "Int"
+            },
+            {
+              "name": "zWarning",
+              "type": "Int"
+            },
+            {
+              "name": "velDisp",
+              "type": "Float"
+            },
+            {
+              "name": "velDispErr",
+              "type": "Float"
+            },
+            {
+              "name": "eCoeff_0",
+              "type": "Float"
+            },
+            {
+              "name": "eCoeff_1",
+              "type": "Float"
+            },
+            {
+              "name": "eCoeff_2",
+              "type": "Float"
+            },
+            {
+              "name": "eCoeff_3",
+              "type": "Float"
+            },
+            {
+              "name": "eCoeff_4",
+              "type": "Float"
+            },
+            {
+              "name": "eClass",
+              "type": "Float"
+            },
+            {
+              "name": "nGood",
+              "type": "Int"
+            },
+            {
+              "name": "sn_0",
+              "type": "Float"
+            },
+            {
+              "name": "sn_1",
+              "type": "Float"
+            },
+            {
+              "name": "sn_2",
+              "type": "Float"
+            },
+            {
+              "name": "mag_0",
+              "type": "Float"
+            },
+            {
+              "name": "mag_1",
+              "type": "Float"
+            },
+            {
+              "name": "mag_2",
+              "type": "Float"
+            },
+            {
+              "name": "ra",
+              "type": "Float"
+            },
+            {
+              "name": "dec",
+              "type": "Float"
+            },
+            {
+              "name": "cx",
+              "type": "Float"
+            },
+            {
+              "name": "cy",
+              "type": "Float"
+            },
+            {
+              "name": "cz",
+              "type": "Float"
+            },
+            {
+              "name": "htmID",
+              "type": "Int"
+            },
+            {
+              "name": "fiberMag_u",
+              "type": "Float"
+            },
+            {
+              "name": "fiberMag_g",
+              "type": "Float"
+            },
+            {
+              "name": "fiberMag_r",
+              "type": "Float"
+            },
+            {
+              "name": "fiberMag_i",
+              "type": "Float"
+            },
+            {
+              "name": "fiberMag_z",
+              "type": "Float"
+            },
+            {
+              "name": "objID",
+              "type": "Int"
+            },
+            {
+              "name": "primTarget",
+              "type": "Int"
+            },
+            {
+              "name": "secTarget",
+              "type": "Int"
+            },
+            {
+              "name": "pixMin",
+              "type": "Int"
+            },
+            {
+              "name": "pixMax",
+              "type": "Int"
+            },
+            {
+              "name": "type",
+              "type": "String"
+            },
+            {
+              "name": "plateID",
+              "type": "Int"
+            },
+            {
+              "name": "tile",
+              "type": "String"
+            },
+            {
+              "name": "insertTime",
+              "type": "String"
+            },
+            {
+              "name": "isPrimary",
+              "type": "Int"
+            }
+          ]
+        },
+        {
+          "name": "Star",
+          "attributes": [
+            {
+              "name": "objID",
+              "type": "Int"
+            },
+            {
+              "name": "run",
+              "type": "Int"
+            },
+            {
+              "name": "rerun",
+              "type": "Int"
+            },
+            {
+              "name": "camcol",
+              "type": "Int"
+            },
+            {
+              "name": "field",
+              "type": "Int"
+            },
+            {
+              "name": "obj",
+              "type": "Int"
+            },
+            {
+              "name": "mode",
+              "type": "Int"
+            },
+            {
+              "name": "nChild",
+              "type": "Int"
+            },
+            {
+              "name": "type",
+              "type": "Int"
+            },
+            {
+              "name": "catID",
+              "type": "Int"
+            },
+            {
+              "name": "flags",
+              "type": "Int"
+            },
+            {
+              "name": "rowc",
+              "type": "Float"
+            },
+            {
+              "name": "rowcErr",
+              "type": "Float"
+            },
+            {
+              "name": "colc",
+              "type": "Float"
+            },
+            {
+              "name": "colcErr",
+              "type": "Float"
+            },
+            {
+              "name": "rowv",
+              "type": "Float"
+            },
+            {
+              "name": "rowvErr",
+              "type": "Float"
+            },
+            {
+              "name": "colv",
+              "type": "Float"
+            },
+            {
+              "name": "colvErr",
+              "type": "Float"
+            },
+            {
+              "name": "rowc_u",
+              "type": "Float"
+            },
+            {
+              "name": "rowc_g",
+              "type": "Float"
+            },
+            {
+              "name": "rowc_r",
+              "type": "Float"
+            },
+            {
+              "name": "rowc_i",
+              "type": "Float"
+            },
+            {
+              "name": "rowc_z",
+              "type": "Float"
+            },
+            {
+              "name": "rowcErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "rowcErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "rowcErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "rowcErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "rowcErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "colc_u",
+              "type": "Float"
+            },
+            {
+              "name": "colc_g",
+              "type": "Float"
+            },
+            {
+              "name": "colc_r",
+              "type": "Float"
+            },
+            {
+              "name": "colc_i",
+              "type": "Float"
+            },
+            {
+              "name": "colc_z",
+              "type": "Float"
+            },
+            {
+              "name": "colcErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "colcErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "colcErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "colcErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "colcErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "sky_u",
+              "type": "Float"
+            },
+            {
+              "name": "sky_g",
+              "type": "Float"
+            },
+            {
+              "name": "sky_r",
+              "type": "Float"
+            },
+            {
+              "name": "sky_i",
+              "type": "Float"
+            },
+            {
+              "name": "sky_z",
+              "type": "Float"
+            },
+            {
+              "name": "skyErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "skyErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "skyErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "skyErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "skyErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "psfMag_u",
+              "type": "Float"
+            },
+            {
+              "name": "psfMag_g",
+              "type": "Float"
+            },
+            {
+              "name": "psfMag_r",
+              "type": "Float"
+            },
+            {
+              "name": "psfMag_i",
+              "type": "Float"
+            },
+            {
+              "name": "psfMag_z",
+              "type": "Float"
+            },
+            {
+              "name": "psfMagErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "psfMagErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "psfMagErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "psfMagErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "psfMagErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "fiberMag_u",
+              "type": "Float"
+            },
+            {
+              "name": "fiberMag_g",
+              "type": "Float"
+            },
+            {
+              "name": "fiberMag_r",
+              "type": "Float"
+            },
+            {
+              "name": "fiberMag_i",
+              "type": "Float"
+            },
+            {
+              "name": "fiberMag_z",
+              "type": "Float"
+            },
+            {
+              "name": "fiberMagErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "fiberMagErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "fiberMagErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "fiberMagErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "fiberMagErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "petroMag_u",
+              "type": "Float"
+            },
+            {
+              "name": "petroMag_g",
+              "type": "Float"
+            },
+            {
+              "name": "petroMag_r",
+              "type": "Float"
+            },
+            {
+              "name": "petroMag_i",
+              "type": "Float"
+            },
+            {
+              "name": "petroMag_z",
+              "type": "Float"
+            },
+            {
+              "name": "petroMagErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "petroMagErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "petroMagErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "petroMagErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "petroMagErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "petroRad_u",
+              "type": "Float"
+            },
+            {
+              "name": "petroRad_g",
+              "type": "Float"
+            },
+            {
+              "name": "petroRad_r",
+              "type": "Float"
+            },
+            {
+              "name": "petroRad_i",
+              "type": "Float"
+            },
+            {
+              "name": "petroRad_z",
+              "type": "Float"
+            },
+            {
+              "name": "petroRadErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "petroRadErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "petroRadErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "petroRadErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "petroRadErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "petroR50_u",
+              "type": "Float"
+            },
+            {
+              "name": "petroR50_g",
+              "type": "Float"
+            },
+            {
+              "name": "petroR50_r",
+              "type": "Float"
+            },
+            {
+              "name": "petroR50_i",
+              "type": "Float"
+            },
+            {
+              "name": "petroR50_z",
+              "type": "Float"
+            },
+            {
+              "name": "petroR50Err_u",
+              "type": "Float"
+            },
+            {
+              "name": "petroR50Err_g",
+              "type": "Float"
+            },
+            {
+              "name": "petroR50Err_r",
+              "type": "Float"
+            },
+            {
+              "name": "petroR50Err_i",
+              "type": "Float"
+            },
+            {
+              "name": "petroR50Err_z",
+              "type": "Float"
+            },
+            {
+              "name": "petroR90_u",
+              "type": "Float"
+            },
+            {
+              "name": "petroR90_g",
+              "type": "Float"
+            },
+            {
+              "name": "petroR90_r",
+              "type": "Float"
+            },
+            {
+              "name": "petroR90_i",
+              "type": "Float"
+            },
+            {
+              "name": "petroR90_z",
+              "type": "Float"
+            },
+            {
+              "name": "petroR90Err_u",
+              "type": "Float"
+            },
+            {
+              "name": "petroR90Err_g",
+              "type": "Float"
+            },
+            {
+              "name": "petroR90Err_r",
+              "type": "Float"
+            },
+            {
+              "name": "petroR90Err_i",
+              "type": "Float"
+            },
+            {
+              "name": "petroR90Err_z",
+              "type": "Float"
+            },
+            {
+              "name": "q_u",
+              "type": "Float"
+            },
+            {
+              "name": "q_g",
+              "type": "Float"
+            },
+            {
+              "name": "q_r",
+              "type": "Float"
+            },
+            {
+              "name": "q_i",
+              "type": "Float"
+            },
+            {
+              "name": "q_z",
+              "type": "Float"
+            },
+            {
+              "name": "qErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "qErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "qErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "qErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "qErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "u_u",
+              "type": "Float"
+            },
+            {
+              "name": "u_g",
+              "type": "Float"
+            },
+            {
+              "name": "u_r",
+              "type": "Float"
+            },
+            {
+              "name": "u_i",
+              "type": "Float"
+            },
+            {
+              "name": "u_z",
+              "type": "Float"
+            },
+            {
+              "name": "uErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "uErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "uErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "uErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "uErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "isoRowc_u",
+              "type": "Float"
+            },
+            {
+              "name": "isoRowc_g",
+              "type": "Float"
+            },
+            {
+              "name": "isoRowc_r",
+              "type": "Float"
+            },
+            {
+              "name": "isoRowc_i",
+              "type": "Float"
+            },
+            {
+              "name": "isoRowc_z",
+              "type": "Float"
+            },
+            {
+              "name": "isoRowcErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "isoRowcErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "isoRowcErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "isoRowcErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "isoRowcErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "isoRowcGrad_u",
+              "type": "Float"
+            },
+            {
+              "name": "isoRowcGrad_g",
+              "type": "Float"
+            },
+            {
+              "name": "isoRowcGrad_r",
+              "type": "Float"
+            },
+            {
+              "name": "isoRowcGrad_i",
+              "type": "Float"
+            },
+            {
+              "name": "isoRowcGrad_z",
+              "type": "Float"
+            },
+            {
+              "name": "isoColc_u",
+              "type": "Float"
+            },
+            {
+              "name": "isoColc_g",
+              "type": "Float"
+            },
+            {
+              "name": "isoColc_r",
+              "type": "Float"
+            },
+            {
+              "name": "isoColc_i",
+              "type": "Float"
+            },
+            {
+              "name": "isoColc_z",
+              "type": "Float"
+            },
+            {
+              "name": "isoColcErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "isoColcErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "isoColcErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "isoColcErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "isoColcErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "isoColcGrad_u",
+              "type": "Float"
+            },
+            {
+              "name": "isoColcGrad_g",
+              "type": "Float"
+            },
+            {
+              "name": "isoColcGrad_r",
+              "type": "Float"
+            },
+            {
+              "name": "isoColcGrad_i",
+              "type": "Float"
+            },
+            {
+              "name": "isoColcGrad_z",
+              "type": "Float"
+            },
+            {
+              "name": "isoA_u",
+              "type": "Float"
+            },
+            {
+              "name": "isoA_g",
+              "type": "Float"
+            },
+            {
+              "name": "isoA_r",
+              "type": "Float"
+            },
+            {
+              "name": "isoA_i",
+              "type": "Float"
+            },
+            {
+              "name": "isoA_z",
+              "type": "Float"
+            },
+            {
+              "name": "isoAErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "isoAErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "isoAErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "isoAErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "isoAErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "isoB_u",
+              "type": "Float"
+            },
+            {
+              "name": "isoB_g",
+              "type": "Float"
+            },
+            {
+              "name": "isoB_r",
+              "type": "Float"
+            },
+            {
+              "name": "isoB_i",
+              "type": "Float"
+            },
+            {
+              "name": "isoB_z",
+              "type": "Float"
+            },
+            {
+              "name": "isoBErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "isoBErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "isoBErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "isoBErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "isoBErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "isoAGrad_u",
+              "type": "Float"
+            },
+            {
+              "name": "isoAGrad_g",
+              "type": "Float"
+            },
+            {
+              "name": "isoAGrad_r",
+              "type": "Float"
+            },
+            {
+              "name": "isoAGrad_i",
+              "type": "Float"
+            },
+            {
+              "name": "isoAGrad_z",
+              "type": "Float"
+            },
+            {
+              "name": "isoBGrad_u",
+              "type": "Float"
+            },
+            {
+              "name": "isoBGrad_g",
+              "type": "Float"
+            },
+            {
+              "name": "isoBGrad_r",
+              "type": "Float"
+            },
+            {
+              "name": "isoBGrad_i",
+              "type": "Float"
+            },
+            {
+              "name": "isoBGrad_z",
+              "type": "Float"
+            },
+            {
+              "name": "isoPhi_u",
+              "type": "Float"
+            },
+            {
+              "name": "isoPhi_g",
+              "type": "Float"
+            },
+            {
+              "name": "isoPhi_r",
+              "type": "Float"
+            },
+            {
+              "name": "isoPhi_i",
+              "type": "Float"
+            },
+            {
+              "name": "isoPhi_z",
+              "type": "Float"
+            },
+            {
+              "name": "isoPhiErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "isoPhiErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "isoPhiErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "isoPhiErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "isoPhiErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "isoPhiGrad_u",
+              "type": "Float"
+            },
+            {
+              "name": "isoPhiGrad_g",
+              "type": "Float"
+            },
+            {
+              "name": "isoPhiGrad_r",
+              "type": "Float"
+            },
+            {
+              "name": "isoPhiGrad_i",
+              "type": "Float"
+            },
+            {
+              "name": "isoPhiGrad_z",
+              "type": "Float"
+            },
+            {
+              "name": "deVRad_u",
+              "type": "Float"
+            },
+            {
+              "name": "deVRad_g",
+              "type": "Float"
+            },
+            {
+              "name": "deVRad_r",
+              "type": "Float"
+            },
+            {
+              "name": "deVRad_i",
+              "type": "Float"
+            },
+            {
+              "name": "deVRad_z",
+              "type": "Float"
+            },
+            {
+              "name": "deVRadErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "deVRadErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "deVRadErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "deVRadErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "deVRadErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "deVAB_u",
+              "type": "Float"
+            },
+            {
+              "name": "deVAB_g",
+              "type": "Float"
+            },
+            {
+              "name": "deVAB_r",
+              "type": "Float"
+            },
+            {
+              "name": "deVAB_i",
+              "type": "Float"
+            },
+            {
+              "name": "deVAB_z",
+              "type": "Float"
+            },
+            {
+              "name": "deVABErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "deVABErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "deVABErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "deVABErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "deVABErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "deVPhi_u",
+              "type": "Float"
+            },
+            {
+              "name": "deVPhi_g",
+              "type": "Float"
+            },
+            {
+              "name": "deVPhi_r",
+              "type": "Float"
+            },
+            {
+              "name": "deVPhi_i",
+              "type": "Float"
+            },
+            {
+              "name": "deVPhi_z",
+              "type": "Float"
+            },
+            {
+              "name": "deVPhiErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "deVPhiErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "deVPhiErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "deVPhiErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "deVPhiErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "deVMag_u",
+              "type": "Float"
+            },
+            {
+              "name": "deVMag_g",
+              "type": "Float"
+            },
+            {
+              "name": "deVMag_r",
+              "type": "Float"
+            },
+            {
+              "name": "deVMag_i",
+              "type": "Float"
+            },
+            {
+              "name": "deVMag_z",
+              "type": "Float"
+            },
+            {
+              "name": "deVMagErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "deVMagErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "deVMagErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "deVMagErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "deVMagErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "expRad_u",
+              "type": "Float"
+            },
+            {
+              "name": "expRad_g",
+              "type": "Float"
+            },
+            {
+              "name": "expRad_r",
+              "type": "Float"
+            },
+            {
+              "name": "expRad_i",
+              "type": "Float"
+            },
+            {
+              "name": "expRad_z",
+              "type": "Float"
+            },
+            {
+              "name": "expRadErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "expRadErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "expRadErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "expRadErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "expRadErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "expAB_u",
+              "type": "Float"
+            },
+            {
+              "name": "expAB_g",
+              "type": "Float"
+            },
+            {
+              "name": "expAB_r",
+              "type": "Float"
+            },
+            {
+              "name": "expAB_i",
+              "type": "Float"
+            },
+            {
+              "name": "expAB_z",
+              "type": "Float"
+            },
+            {
+              "name": "expABErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "expABErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "expABErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "expABErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "expABErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "expPhi_u",
+              "type": "Float"
+            },
+            {
+              "name": "expPhi_g",
+              "type": "Float"
+            },
+            {
+              "name": "expPhi_r",
+              "type": "Float"
+            },
+            {
+              "name": "expPhi_i",
+              "type": "Float"
+            },
+            {
+              "name": "expPhi_z",
+              "type": "Float"
+            },
+            {
+              "name": "expPhiErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "expPhiErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "expPhiErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "expPhiErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "expPhiErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "expMag_u",
+              "type": "Float"
+            },
+            {
+              "name": "expMag_g",
+              "type": "Float"
+            },
+            {
+              "name": "expMag_r",
+              "type": "Float"
+            },
+            {
+              "name": "expMag_i",
+              "type": "Float"
+            },
+            {
+              "name": "expMag_z",
+              "type": "Float"
+            },
+            {
+              "name": "expMagErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "expMagErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "expMagErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "expMagErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "expMagErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "modelMag_u",
+              "type": "Float"
+            },
+            {
+              "name": "modelMag_g",
+              "type": "Float"
+            },
+            {
+              "name": "modelMag_r",
+              "type": "Float"
+            },
+            {
+              "name": "modelMag_i",
+              "type": "Float"
+            },
+            {
+              "name": "modelMag_z",
+              "type": "Float"
+            },
+            {
+              "name": "modelMagErr_u",
+              "type": "Float"
+            },
+            {
+              "name": "modelMagErr_g",
+              "type": "Float"
+            },
+            {
+              "name": "modelMagErr_r",
+              "type": "Float"
+            },
+            {
+              "name": "modelMagErr_i",
+              "type": "Float"
+            },
+            {
+              "name": "modelMagErr_z",
+              "type": "Float"
+            },
+            {
+              "name": "texture_u",
+              "type": "Float"
+            },
+            {
+              "name": "texture_g",
+              "type": "Float"
+            },
+            {
+              "name": "texture_r",
+              "type": "Float"
+            },
+            {
+              "name": "texture_i",
+              "type": "Float"
+            },
+            {
+              "name": "texture_z",
+              "type": "Float"
+            },
+            {
+              "name": "lStar_u",
+              "type": "Float"
+            },
+            {
+              "name": "lStar_g",
+              "type": "Float"
+            },
+            {
+              "name": "lStar_r",
+              "type": "Float"
+            },
+            {
+              "name": "lStar_i",
+              "type": "Float"
+            },
+            {
+              "name": "lStar_z",
+              "type": "Float"
+            },
+            {
+              "name": "lExp_u",
+              "type": "Float"
+            },
+            {
+              "name": "lExp_g",
+              "type": "Float"
+            },
+            {
+              "name": "lExp_r",
+              "type": "Float"
+            },
+            {
+              "name": "lExp_i",
+              "type": "Float"
+            },
+            {
+              "name": "lExp_z",
+              "type": "Float"
+            },
+            {
+              "name": "lDeV_u",
+              "type": "Float"
+            },
+            {
+              "name": "lDeV_g",
+              "type": "Float"
+            },
+            {
+              "name": "lDeV_r",
+              "type": "Float"
+            },
+            {
+              "name": "lDeV_i",
+              "type": "Float"
+            },
+            {
+              "name": "lDeV_z",
+              "type": "Float"
+            },
+            {
+              "name": "fracPSF_u",
+              "type": "Float"
+            },
+            {
+              "name": "fracPSF_g",
+              "type": "Float"
+            },
+            {
+              "name": "fracPSF_r",
+              "type": "Float"
+            },
+            {
+              "name": "fracPSF_i",
+              "type": "Float"
+            },
+            {
+              "name": "fracPSF_z",
+              "type": "Float"
+            },
+            {
+              "name": "flags_u",
+              "type": "Int"
+            },
+            {
+              "name": "flags_g",
+              "type": "Int"
+            },
+            {
+              "name": "flags_r",
+              "type": "Int"
+            },
+            {
+              "name": "flags_i",
+              "type": "Int"
+            },
+            {
+              "name": "flags_z",
+              "type": "Int"
+            },
+            {
+              "name": "type_u",
+              "type": "Int"
+            },
+            {
+              "name": "type_g",
+              "type": "Int"
+            },
+            {
+              "name": "type_r",
+              "type": "Int"
+            },
+            {
+              "name": "type_i",
+              "type": "Int"
+            },
+            {
+              "name": "type_z",
+              "type": "Int"
+            },
+            {
+              "name": "status",
+              "type": "Int"
+            },
+            {
+              "name": "ra",
+              "type": "Float"
+            },
+            {
+              "name": "dec",
+              "type": "Float"
+            },
+            {
+              "name": "cx",
+              "type": "Float"
+            },
+            {
+              "name": "cy",
+              "type": "Float"
+            },
+            {
+              "name": "cz",
+              "type": "Float"
+            },
+            {
+              "name": "offsetRa_u",
+              "type": "Float"
+            },
+            {
+              "name": "offsetRa_g",
+              "type": "Float"
+            },
+            {
+              "name": "offsetRa_r",
+              "type": "Float"
+            },
+            {
+              "name": "offsetRa_i",
+              "type": "Float"
+            },
+            {
+              "name": "offsetRa_z",
+              "type": "Float"
+            },
+            {
+              "name": "offsetDec_u",
+              "type": "Float"
+            },
+            {
+              "name": "offsetDec_g",
+              "type": "Float"
+            },
+            {
+              "name": "offsetDec_r",
+              "type": "Float"
+            },
+            {
+              "name": "offsetDec_i",
+              "type": "Float"
+            },
+            {
+              "name": "offsetDec_z",
+              "type": "Float"
+            },
+            {
+              "name": "primTarget",
+              "type": "Int"
+            },
+            {
+              "name": "secTarget",
+              "type": "Int"
+            },
+            {
+              "name": "reddening_u",
+              "type": "Float"
+            },
+            {
+              "name": "reddening_g",
+              "type": "Float"
+            },
+            {
+              "name": "reddening_r",
+              "type": "Float"
+            },
+            {
+              "name": "reddening_i",
+              "type": "Float"
+            },
+            {
+              "name": "reddening_z",
+              "type": "Float"
+            },
+            {
+              "name": "priority",
+              "type": "Int"
+            },
+            {
+              "name": "rho",
+              "type": "Float"
+            },
+            {
+              "name": "htmID",
+              "type": "Int"
+            },
+            {
+              "name": "fieldID",
+              "type": "Int"
+            },
+            {
+              "name": "parentID",
+              "type": "String"
+            },
+            {
+              "name": "specObjID",
+              "type": "String"
+            },
+            {
+              "name": "u",
+              "type": "Float"
+            },
+            {
+              "name": "g",
+              "type": "Float"
+            },
+            {
+              "name": "r",
+              "type": "Float"
+            },
+            {
+              "name": "i",
+              "type": "Float"
+            },
+            {
+              "name": "z",
+              "type": "Float"
+            },
+            {
+              "name": "err_u",
+              "type": "Float"
+            },
+            {
+              "name": "err_g",
+              "type": "Float"
+            },
+            {
+              "name": "err_r",
+              "type": "Float"
+            },
+            {
+              "name": "err_i",
+              "type": "Float"
+            },
+            {
+              "name": "err_z",
+              "type": "Float"
+            },
+            {
+              "name": "insertTime",
               "type": "String"
             }
           ]
