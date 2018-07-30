@@ -1,17 +1,15 @@
-package com.ripple.mapreduce;
+package com.ripple.query.selectfilter;
 
-import com.ripple.sqloperator.FormatOperator;
-import com.ripple.sqloperator.MapOperator;
-import com.ripple.sqloperator.ReduceOperator;
+import com.ripple.database.Attribute;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TaskInfo {
-    // must not be empty
+public class SelectFilterTask {
+    // can be empty
     public List<MapOperator> mapOperators = new ArrayList<>();
     // can be null
-    public FormatOperator mapFormatConfig = null;
+    public FormatMapOperator mapFormatConfig = null;
 
     // must not be null
     public ReduceOperator reduceOperator = null;
@@ -20,4 +18,7 @@ public class TaskInfo {
     public List<String> inputPaths = new ArrayList<>();
     // must not be null
     public String outputPath = null;
+
+    // attributes after task
+    public List<Attribute> attributes;
 }

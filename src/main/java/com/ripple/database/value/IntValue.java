@@ -1,4 +1,4 @@
-package com.ripple.value;
+package com.ripple.database.value;
 
 public class IntValue extends Value {
     private Long value;
@@ -8,12 +8,12 @@ public class IntValue extends Value {
         value = 0L;
     }
 
-    public IntValue(Integer v) {
+    public IntValue(int v) {
         super();
-        value = v.longValue();
+        value = (long) v;
     }
 
-    public IntValue(Long v) {
+    public IntValue(long v) {
         super();
         value = v;
     }
@@ -21,6 +21,10 @@ public class IntValue extends Value {
     public IntValue(String v) {
         super();
         value = new Long(v);
+    }
+
+    public long get() {
+        return value;
     }
 
     @Override
@@ -36,6 +40,8 @@ public class IntValue extends Value {
 
     @Override
     public boolean equals(Object o) {
+        if (!(o instanceof IntValue))
+            return false;
         IntValue intValue = (IntValue) o;
         return value.equals(intValue.value);
     }

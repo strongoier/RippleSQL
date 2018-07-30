@@ -1,4 +1,4 @@
-package com.ripple.value;
+package com.ripple.database.value;
 
 public class FloatValue extends Value {
     private Double value;
@@ -8,12 +8,12 @@ public class FloatValue extends Value {
         value = 0.0;
     }
 
-    public FloatValue(Float v) {
+    public FloatValue(float v) {
         super();
-        value = v.doubleValue();
+        value = (double) v;
     }
 
-    public FloatValue(Double v) {
+    public FloatValue(double v) {
         super();
         value = v;
     }
@@ -21,6 +21,10 @@ public class FloatValue extends Value {
     public FloatValue(String v) {
         super();
         value = new Double(v);
+    }
+
+    public double get() {
+        return value;
     }
 
     @Override
@@ -36,6 +40,8 @@ public class FloatValue extends Value {
 
     @Override
     public boolean equals(Object o) {
+        if (!(o instanceof FloatValue))
+            return false;
         FloatValue floatValue = (FloatValue) o;
         return value.equals(floatValue.value);
     }

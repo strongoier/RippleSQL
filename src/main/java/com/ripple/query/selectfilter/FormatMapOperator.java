@@ -1,4 +1,4 @@
-package com.ripple.sqloperator;
+package com.ripple.query.selectfilter;
 
 import com.ripple.database.Attribute;
 import com.ripple.util.Pair;
@@ -11,7 +11,7 @@ import java.util.List;
     RelationName\tAttributeName\tValueClassName\tindex
  */
 
-public class FormatOperator {
+public class FormatMapOperator {
     private int index = -1;
 
     @Override

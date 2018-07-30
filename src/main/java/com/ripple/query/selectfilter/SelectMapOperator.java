@@ -1,4 +1,4 @@
-package com.ripple.sqloperator;
+package com.ripple.query.selectfilter;
 
 import com.ripple.database.Attribute;
 import com.ripple.util.Pair;
@@ -6,12 +6,11 @@ import org.apache.hadoop.io.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class SelectMapOperator extends MapOperator {
-    private List<Integer> indexs = new ArrayList<>();
+    private List<Integer> indexs;
 
     @Override
     public String toString() {
@@ -23,13 +22,12 @@ public class SelectMapOperator extends MapOperator {
         indexs = Arrays.stream(config.split("\t")).map(Integer::parseInt).collect(Collectors.toList());
     }
 
-    public List<Attribute> setup(List<Attribute> needs, List<Attribute> attrs) {
+    public void setup(List<Attribute> selectAttributes, List<Attribute> attrs) {
         indexs = new ArrayList<>();
-        for (Attribute need : needs)
+        for (Attribute need : selectAttributes)
             for (int i = 0; i < attrs.size(); ++i)
                 if (need.equals(attrs.get(i)))
                     indexs.add(i);
-        return needs;
     }
 
     @Override

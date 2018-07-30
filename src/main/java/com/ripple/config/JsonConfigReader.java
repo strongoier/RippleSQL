@@ -3,11 +3,11 @@ package com.ripple.config;
 import com.ripple.database.Attribute;
 import com.ripple.database.Database;
 import com.ripple.database.Relation;
-import com.ripple.util.FileUtil;
+import com.ripple.util.FilesUtil;
 import com.ripple.util.StringUtil;
-import com.ripple.value.FloatValue;
-import com.ripple.value.IntValue;
-import com.ripple.value.StringValue;
+import com.ripple.database.value.FloatValue;
+import com.ripple.database.value.IntValue;
+import com.ripple.database.value.StringValue;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -39,7 +39,7 @@ public class JsonConfigReader extends ConfigReader {
 
     @Override
     public Map<String, Database> getDatabases() throws IOException {
-        String configuration = StringUtil.removeSpaces(FileUtil.readAll(configJsonFile));
+        String configuration = StringUtil.removeSpaces(FilesUtil.readAll(configJsonFile));
         Map<String, Database> databaseMap = new HashMap<>();
         JSONArray databaseArray = new JSONObject(configuration).getJSONArray("databases");
         for (Object tmp1 : databaseArray) {

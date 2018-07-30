@@ -1,6 +1,5 @@
-package com.ripple.sqloperator;
+package com.ripple.query.selectfilter;
 
-import com.ripple.database.Attribute;
 import com.ripple.util.Pair;
 import org.apache.hadoop.io.Text;
 

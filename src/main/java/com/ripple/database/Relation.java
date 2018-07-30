@@ -33,12 +33,7 @@ public class Relation {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         List<Attribute> attributes = new ArrayList<>(attributeMap.values());
-        Collections.sort(attributes, new Comparator<Attribute>() {
-            @Override
-            public int compare(Attribute o1, Attribute o2) {
-                return o1.getIndex() - o2.getIndex();
-            }
-        });
+        Collections.sort(attributes, Comparator.comparing(Attribute::getIndex));
         for (Attribute attribute : attributes) {
             builder.append(attribute).append('\n');
         }
@@ -49,5 +44,15 @@ public class Relation {
         if (!attributeMap.containsKey(attrName))
             throw new RuntimeException(String.format("No Such Attribute(%s) in Relation(%s)!!!", attrName, name));
         return attributeMap.get(attrName);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Relation))
+            return false;
+        Relation rel = (Relation) o;
+        if (name.equals(rel.name))
+            return true;
+        return false;
     }
 }

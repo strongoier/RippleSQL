@@ -1,9 +1,9 @@
 package com.ripple.util;
 
-import com.ripple.mapreduce.TaskInfo;
-import com.ripple.sqloperator.FormatOperator;
-import com.ripple.sqloperator.MapOperator;
-import com.ripple.sqloperator.ReduceOperator;
+import com.ripple.query.selectfilter.SelectFilterTask;
+import com.ripple.query.selectfilter.FormatMapOperator;
+import com.ripple.query.selectfilter.MapOperator;
+import com.ripple.query.selectfilter.ReduceOperator;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
@@ -19,91 +19,85 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class TaskUtil {
-    public static void createJob(List<TaskInfo> infos) throws IOException {
-        for (TaskInfo info : infos) {
-            Class mapClass = new Mapper<Object, Text, Text, Text>() {
-                private List<MapOperator> operators;
-                private FormatOperator formatOperator;
+    public static void runTasks(List<SelectFilterTask> tasks) throws IOException {
+        for (SelectFilterTask task : tasks) {
+            Class mapperClass = new Mapper<Object, Text, Text, Text>() {
+                private List<MapOperator> mapOps;
+                private FormatMapOperator formatOp;
 
                 @Override
                 protected void setup(Context context) throws IOException, InterruptedException {
                     super.setup(context);
-                    operators = new ArrayList<>();
-                    formatOperator = new FormatOperator();
-                    Configuration configuration = context.getConfiguration();
-                    String[] classNames = configuration.get("job.map.operators").split("#");
-                    String[] configs = configuration.get("job.map.configs").split("#");
-                    String formatConfig = configuration.get("job.map.formatConfig");
+                    mapOps = new ArrayList<>();
+                    formatOp = new FormatMapOperator();
+                    Configuration conf = context.getConfiguration();
+                    String[] mapOpClassNames = conf.get("job.map.operators").split("#");
+                    String[] mapOpConfigs = conf.get("job.map.configs").split("#");
+                    String formatOpConfig = conf.get("job.map.formatConfig");
                     try {
-                        for (int i = 0; i < classNames.length; ++i) {
-                            MapOperator operator = (MapOperator) Class.forName(classNames[i]).newInstance();
-                            operator.fromString(configs[i]);
-                            operators.add(operator);
+                        for (int i = 0; i < mapOpClassNames.length; ++i) {
+                            MapOperator operator = (MapOperator) Class.forName(mapOpClassNames[i]).newInstance();
+                            operator.fromString(mapOpConfigs[i]);
+                            mapOps.add(operator);
                         }
-                        if (formatConfig != null)
-                            formatOperator.fromString(formatConfig);
-                    } catch (ClassNotFoundException e) {
-                        throw new RuntimeException("ClassNotFoundException");
-                    } catch (IllegalAccessException e) {
-                        throw new RuntimeException("IllegalAccessException");
-                    } catch (InstantiationException e) {
-                        throw new RuntimeException("InstantiationException");
+                        if (formatOpConfig != null)
+                            formatOp.fromString(formatOpConfig);
+                    } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+                        throw new RuntimeException(e.getCause());
                     }
                 }
 
                 @Override
                 protected void map(Object key, Text value, Context context) throws IOException, InterruptedException {
-                    List<Pair<Object, Text>> pairs = new ArrayList<>();
-                    pairs.add(new Pair<>(key, value));
-                    for (MapOperator op : operators)
-                        pairs = op.map(pairs);
-                    List<Pair<Text, Text>> results = formatOperator.format(pairs);
-                    for (Pair<Text, Text> result : results)
+                    List<Pair<Object, Text>> keyValues = new ArrayList<>();
+                    keyValues.add(new Pair<>(key, value));
+                    for (MapOperator op : mapOps) {
+                        keyValues = op.map(keyValues);
+                    }
+                    List<Pair<Text, Text>> results = formatOp.format(keyValues);
+                    for (Pair<Text, Text> result : results) {
                         context.write(result.getKey(), result.getValue());
+                    }
                 }
             }.getClass();
-            Class reduceClass = new Reducer<Text, Text, Text, Text>() {
-                private ReduceOperator operator;
+            Class reducerClass = new Reducer<Text, Text, Text, Text>() {
+                private ReduceOperator reduceOp;
 
                 @Override
                 protected void setup(Context context) throws IOException, InterruptedException {
                     super.setup(context);
-                    Configuration configuration = context.getConfiguration();
-                    String className = configuration.get("job.reduce.operator");
-                    String config = configuration.get("job.reduce.config");
+                    Configuration conf = context.getConfiguration();
+                    String reduceOpClassName = conf.get("job.reduce.operator");
+                    String reduceOpConfig = conf.get("job.reduce.config");
                     try {
-                        operator = (ReduceOperator) Class.forName(className).newInstance();
-                        operator.fromString(config);
-                    } catch (ClassNotFoundException e) {
-                        throw new RuntimeException("ClassNotFoundException");
-                    } catch (IllegalAccessException e) {
-                        throw new RuntimeException("IllegalAccessException");
-                    } catch (InstantiationException e) {
-                        throw new RuntimeException("InstantiationException");
+                        reduceOp = (ReduceOperator) Class.forName(reduceOpClassName).newInstance();
+                        reduceOp.fromString(reduceOpConfig);
+                    } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+                        throw new RuntimeException(e.getCause());
                     }
                 }
 
                 @Override
                 protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
-                    operator.reduce(key, values, context);
+                    reduceOp.reduce(key, values, context);
                 }
             }.getClass();
-            Configuration configuration = new Configuration();
-            configuration.set("job.map.operators", String.join("#", info.mapOperators.stream().map(MapOperator::getClass).map(Class::getName).collect(Collectors.toList())));
-            configuration.set("job.map.configs", String.join("#", info.mapOperators.stream().map(MapOperator::toString).collect(Collectors.toList())));
-            if (info.mapFormatConfig != null)
-                configuration.set("job.map.formatConfig", info.mapFormatConfig.toString());
-            configuration.set("job.reduce.operator", info.reduceOperator.getClass().getName());
-            configuration.set("job.reduce.config", info.reduceOperator.toString());
-            Job job = Job.getInstance(configuration);
-            job.setJarByClass(TaskUtil.class);
-            job.setMapperClass(mapClass);
-            job.setReducerClass(reduceClass);
+            Configuration conf = new Configuration();
+            conf.set("job.map.operators", String.join("#", task.mapOperators.stream().map(MapOperator::getClass).map(Class::getName).collect(Collectors.toList())));
+            conf.set("job.map.configs", String.join("#", task.mapOperators.stream().map(MapOperator::toString).collect(Collectors.toList())));
+            if (task.mapFormatConfig != null)
+                conf.set("job.map.formatConfig", task.mapFormatConfig.toString());
+            conf.set("job.reduce.operator", task.reduceOperator.getClass().getName());
+            conf.set("job.reduce.config", task.reduceOperator.toString());
+            Job job = Job.getInstance(conf);
+            job.setJarByClass(SelectFilterTask.class);
+            job.setMapperClass(mapperClass);
+            job.setReducerClass(reducerClass);
             job.setOutputKeyClass(Text.class);
             job.setOutputValueClass(Text.class);
-            for (String path : info.inputPaths)
+            for (String path : task.inputPaths)
                 FileInputFormat.addInputPath(job, new Path(path));
-            FileOutputFormat.setOutputPath(job, new Path(info.outputPath));
+            FileOutputFormat.setOutputPath(job, new Path(task.outputPath));
             try {
                 job.waitForCompletion(true);
             } catch (InterruptedException | ClassNotFoundException e) {

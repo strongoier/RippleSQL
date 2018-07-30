@@ -2,9 +2,9 @@
 package com.ripple.frontend;
 
 import com.ripple.database.*;
-import com.ripple.algooperator.*;
+import com.ripple.database.binop.*;
+import com.ripple.database.value.*;
 import com.ripple.query.*;
-import com.ripple.value.*;
 
 import java.util.*;
 
@@ -26,7 +26,7 @@ public class Parser {
 %token <String> IDENTIFIER
 
 %type <Value> value
-%type <AlgoOperator> op
+%type <BinOp> op
 %type <List<String>> relation_list
 %type <String> attr_name
 %type <Attribute> attr
@@ -152,27 +152,27 @@ value
 op
   : LT
   {
-    $$ = AlgoOperator.ltOp;
+    $$ = BinOp.ltOp;
   }
   | LE
   {
-    $$ = AlgoOperator.leOp;
+    $$ = BinOp.leOp;
   }
   | GT
   {
-    $$ = AlgoOperator.gtOp;
+    $$ = BinOp.gtOp;
   }
   | GE
   {
-    $$ = AlgoOperator.geOp;
+    $$ = BinOp.geOp;
   }
   | EQ
   {
-    $$ = AlgoOperator.eqOp;
+    $$ = BinOp.eqOp;
   }
   | NE
   {
-    $$ = AlgoOperator.neOp;
+    $$ = BinOp.neOp;
   }
 
 nothing

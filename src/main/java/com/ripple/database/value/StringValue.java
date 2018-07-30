@@ -1,4 +1,4 @@
-package com.ripple.value;
+package com.ripple.database.value;
 
 public class StringValue extends Value {
     private String value;
@@ -11,6 +11,10 @@ public class StringValue extends Value {
     public StringValue(String v) {
         super();
         value = v;
+    }
+
+    public String get() {
+        return value;
     }
 
     @Override
@@ -26,6 +30,8 @@ public class StringValue extends Value {
 
     @Override
     public boolean equals(Object o) {
+        if (!(o instanceof StringValue))
+            return false;
         StringValue stringValue = (StringValue) o;
         return value.equals(stringValue.value);
     }
