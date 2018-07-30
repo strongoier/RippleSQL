@@ -1432,11 +1432,11 @@
             },
             {
               "name": "parentID",
-              "type": "String"
+              "type": "Int"
             },
             {
               "name": "specObjID",
-              "type": "String"
+              "type": "Int"
             },
             {
               "name": "u",
@@ -3236,11 +3236,11 @@
             },
             {
               "name": "parentID",
-              "type": "String"
+              "type": "Int"
             },
             {
               "name": "specObjID",
-              "type": "String"
+              "type": "Int"
             },
             {
               "name": "u",
