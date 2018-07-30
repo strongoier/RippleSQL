@@ -1,4 +1,4 @@
-package com.ripple.query.selectfilter;
+package com.ripple.query.operator;
 
 import com.ripple.database.Attribute;
 

@@ -1,7 +1,9 @@
 package com.ripple.util;
 
-import com.ripple.query.selectfilter.FormatOperator;
-import com.ripple.query.selectfilter.*;
+import com.ripple.query.task.SelectFilterTask;
+import com.ripple.query.operator.FilterOperator;
+import com.ripple.query.operator.SelectMapOperator;
+import com.ripple.query.operator.SetKeyOperator;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
@@ -25,7 +27,7 @@ public class SelectFilterTaskUtil {
         Class mapperClass = new Mapper<Object, Text, IntWritable, Text>() {
             private final IntWritable ONE = new IntWritable(1);
             private SelectMapOperator selectOp;
-            private FilterMapOperator filterOp;
+            private FilterOperator filterOp;
             private SFMapper mapper;
 
             @Override
@@ -39,33 +41,31 @@ public class SelectFilterTaskUtil {
                 }
                 String filterOpConfig = conf.get("job.map.filter");
                 if (filterOpConfig != null) {
-                    filterOp = new FilterMapOperator();
+                    filterOp = new FilterOperator();
                     filterOp.fromString(filterOpConfig);
                 }
                 if (selectOp == null && filterOp == null)
-                    mapper = (key, value, cont) -> {
-                        cont.write(ONE, value);
+                    mapper = (key, value, context1) -> {
+                        context1.write(ONE, value);
                     };
                 else if (selectOp != null && filterOp == null)
-                    mapper = (key, value, cont) -> {
+                    mapper = (key, value, context1) -> {
                         String[] values = value.toString().split("\t");
                         values = selectOp.map(values);
-                        cont.write(ONE, new Text(String.join("\t", values)));
+                        context1.write(ONE, new Text(String.join("\t", values)));
                     };
                 else if (selectOp == null && filterOp != null)
-                    mapper = (key, value, cont) -> {
+                    mapper = (key, value, context1) -> {
                         String[] values = value.toString().split("\t");
-                        values = filterOp.map(values);
-                        if (values != null)
-                            cont.write(ONE, new Text(String.join("\t", values)));
+                        if (filterOp.map(values))
+                            context1.write(ONE, value);
                     };
                 else
-                    mapper = (key, value, cont) -> {
+                    mapper = (key, value, context1) -> {
                         String[] values = value.toString().split("\t");
                         values = selectOp.map(values);
-                        values = filterOp.map(values);
-                        if (values != null)
-                            cont.write(ONE, new Text(String.join("\t", values)));
+                        if (filterOp.map(values))
+                            context1.write(ONE, new Text(String.join("\t", values)));
                     };
             }
 
@@ -76,19 +76,19 @@ public class SelectFilterTaskUtil {
             }
         }.getClass();
         Class reducerClass = new Reducer<IntWritable, Text, Text, Text>() {
-            private FormatOperator formatOp;
+            private SetKeyOperator setKeyOp;
 
             @Override
             protected void setup(Context context) throws IOException, InterruptedException {
                 super.setup(context);
-                formatOp = new FormatOperator();
+                setKeyOp = new SetKeyOperator();
             }
 
             @Override
             protected void reduce(IntWritable key, Iterable<Text> values, Context context)
                     throws IOException, InterruptedException {
                 for (Text value : values) {
-                    Pair<Text, Text> result = formatOp.format(value);
+                    Pair<Text, Text> result = setKeyOp.format(value.toString().split("\t"));
                     context.write(result.getKey(), result.getValue());
                 }
             }
@@ -106,13 +106,16 @@ public class SelectFilterTaskUtil {
         job.setMapOutputValueClass(Text.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
-        FileInputFormat.addInputPath(job, new Path(task.inputPath));
-        FileOutputFormat.setOutputPath(job, new Path(task.outputPath));
+        for (String inputPath : task.inputPaths)
+            FileInputFormat.addInputPath(job, new Path(inputPath));
+        Path outputPath = new Path(task.outputPath);
+        FileOutputFormat.setOutputPath(job, outputPath);
         try {
             job.waitForCompletion(true);
         } catch (InterruptedException | ClassNotFoundException e) {
             throw new RuntimeException(e.getCause());
         }
+        FilesUtil.getOutputFileInfo(task, conf);
     }
 
     public static void runTasks(List<SelectFilterTask> tasks) throws IOException {

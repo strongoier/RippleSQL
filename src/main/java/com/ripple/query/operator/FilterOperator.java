@@ -1,12 +1,10 @@
-package com.ripple.query.selectfilter;
+package com.ripple.query.operator;
 
 import com.ripple.database.Attribute;
 import com.ripple.database.binop.BinOp;
 import com.ripple.database.Condition;
-import com.ripple.query.MapOperator;
 import com.ripple.util.Pair;
 import com.ripple.database.value.Value;
-import org.apache.hadoop.io.Text;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -14,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class FilterMapOperator {
+public class FilterOperator {
     private static class Filter {
         Pair<Integer, Class> leftAttribute;
         BinOp binOp;
@@ -121,10 +119,10 @@ public class FilterMapOperator {
         }
     }
 
-    public String[] map(String[] input) {
+    public boolean map(String[] input) {
         for (Filter filter : filters)
             if (!filter.filter(input))
-                return null;
-        return input;
+                return false;
+        return true;
     }
 }

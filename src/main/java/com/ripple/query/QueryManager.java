@@ -3,16 +3,19 @@ package com.ripple.query;
 import com.ripple.config.ConfigReader;
 import com.ripple.database.*;
 import com.ripple.database.binop.BinOp;
-import com.ripple.query.selectfilter.FilterMapOperator;
-import com.ripple.query.selectfilter.SelectFilterTask;
-import com.ripple.query.selectfilter.SelectMapOperator;
+import com.ripple.query.operator.JoinMapOperator;
+import com.ripple.query.task.JoinTask;
+import com.ripple.query.operator.FilterOperator;
+import com.ripple.query.task.SelectFilterTask;
+import com.ripple.query.operator.SelectMapOperator;
+import com.ripple.query.task.MapReduceTask;
+import com.ripple.util.JoinTaskUtil;
 import com.ripple.util.Pair;
 import com.ripple.util.StringUtil;
 import com.ripple.util.SelectFilterTaskUtil;
 import com.ripple.database.value.FloatValue;
 import com.ripple.database.value.IntValue;
 import com.ripple.database.value.Value;
-import org.w3c.dom.Attr;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -116,7 +119,7 @@ public class QueryManager {
         for (String relationName : relations.keySet()) {
             SelectFilterTask task = new SelectFilterTask();
             Relation relation = relations.get(relationName);
-            task.inputPath = getRelationPath(relation);
+            task.inputPaths.add(getRelationPath(relation));
             task.outputPath = getTmpPath(date, tmpIndex);
             List<Attribute> originAttributes = relation.getAttributeMap().values().stream()
                     .sorted(Comparator.comparing(Attribute::getIndex)).collect(Collectors.toList());
@@ -130,7 +133,7 @@ public class QueryManager {
             }
             if (simpleConditionMap.containsKey(relationName)) {
                 List<Condition> simpleConditions = simpleConditionMap.get(relationName);
-                FilterMapOperator filterOp = new FilterMapOperator();
+                FilterOperator filterOp = new FilterOperator();
                 filterOp.setup(simpleConditions, task.attributes);
                 task.filterOperator = filterOp;
             }
@@ -145,11 +148,58 @@ public class QueryManager {
         if (selectFilterTasks.size() == 1) {
             lastJoinTask = selectFilterTasks.get(0);
         } else {
-            // todo
+            PriorityQueue<MapReduceTask> needJoinRelations = new PriorityQueue<>(selectFilterTasks.size(),
+                    Comparator.comparing(task->task.lines));
+            needJoinRelations.addAll(selectFilterTasks);
+            while (needJoinRelations.size() > 1) {
+                MapReduceTask a = needJoinRelations.poll();
+                MapReduceTask b = needJoinRelations.poll();
+                List<Condition> equalConditionsBetweenAB = new ArrayList<>();
+                List<Condition> notEqualConditionsBetweenAB = new ArrayList<>();
+                List<Condition> remainEqualConditions = new ArrayList<>();
+                List<Condition> remainNotEqualConditions = new ArrayList<>();
+                for (Condition condition : equalConditionList) {
+                    Attribute left = condition.getLeftAttribute();
+                    Attribute right = condition.getRightAttribute();
+                    if ((a.attributes.contains(left) && b.attributes.contains(right))
+                            || (a.attributes.contains(right) && b.attributes.contains(left)))
+                        equalConditionsBetweenAB.add(condition);
+                    else
+                        remainEqualConditions.add(condition);
+                }
+                for (Condition condition : notEqualConditionList) {
+                    Attribute left = condition.getLeftAttribute();
+                    Attribute right = condition.getRightAttribute();
+                    if ((a.attributes.contains(left) && b.attributes.contains(right))
+                            || (a.attributes.contains(right) && b.attributes.contains(left)))
+                        notEqualConditionsBetweenAB.add(condition);
+                    else
+                        remainNotEqualConditions.add(condition);
+                }
+                equalConditionList = remainEqualConditions;
+                notEqualConditionList = remainNotEqualConditions;
+                JoinTask task = new JoinTask();
+                task.inputPaths.add(a.outputPath);
+                task.inputPaths.add(b.outputPath);
+                task.outputPath = getTmpPath(date, tmpIndex);
+                ++tmpIndex;
+                task.attributes = new ArrayList<>();
+                task.attributes.addAll(a.attributes);
+                task.attributes.addAll(b.attributes);
+                task.joinMapOperator = new JoinMapOperator();
+                task.joinMapOperator.setup(a, b, equalConditionsBetweenAB);
+                if (notEqualConditionsBetweenAB.size() != 0) {
+                    task.filterOperator = new FilterOperator();
+                    task.filterOperator.setup(notEqualConditionsBetweenAB, task.attributes);
+                }
+                JoinTaskUtil.runTask(task);
+                needJoinRelations.offer(task);
+                lastJoinTask = task;
+            }
         }
 
         SelectFilterTask finalTask = new SelectFilterTask();
-        finalTask.inputPath = lastJoinTask.outputPath;
+        finalTask.inputPaths.add(lastJoinTask.outputPath);
         finalTask.outputPath = getOutputPath(date);
         finalTask.attributes = attributes;
         SelectMapOperator selectOp = new SelectMapOperator();
