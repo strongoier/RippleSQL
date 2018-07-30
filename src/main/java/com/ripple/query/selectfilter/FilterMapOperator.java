@@ -3,6 +3,7 @@ package com.ripple.query.selectfilter;
 import com.ripple.database.Attribute;
 import com.ripple.database.binop.BinOp;
 import com.ripple.database.Condition;
+import com.ripple.query.MapOperator;
 import com.ripple.util.Pair;
 import com.ripple.database.value.Value;
 import org.apache.hadoop.io.Text;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class FilterMapOperator extends MapOperator {
+public class FilterMapOperator {
     private static class Filter {
         Pair<Integer, Class> leftAttribute;
         BinOp binOp;
@@ -77,12 +78,10 @@ public class FilterMapOperator extends MapOperator {
 
     private List<Filter> filters;
 
-    @Override
     public String toString() {
         return String.join("\t", filters.stream().map(Filter::toString).collect(Collectors.toList()));
     }
 
-    @Override
     public void fromString(String configs) {
         filters = new ArrayList<>();
         for (String config : configs.split("\t")) {
@@ -122,18 +121,10 @@ public class FilterMapOperator extends MapOperator {
         }
     }
 
-    @Override
-    public List<Pair<Object, Text>> map(List<Pair<Object, Text>> input) {
-        List<Pair<Object, Text>> results = new ArrayList<>();
-        Loop: for (Pair<Object, Text> pair : input) {
-            String[] line = pair.getValue().toString().split("\t");
-            for (Filter filter : filters) {
-                if (!filter.filter(line)) {
-                    continue Loop;
-                }
-            }
-            results.add(pair);
-        }
-        return results;
+    public String[] map(String[] input) {
+        for (Filter filter : filters)
+            if (!filter.filter(input))
+                return null;
+        return input;
     }
 }

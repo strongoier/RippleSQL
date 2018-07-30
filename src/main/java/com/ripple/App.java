@@ -12,6 +12,7 @@ import java.nio.file.Paths;
 
 public class App {
     public static void main(String[] args) throws Exception {
+        long start = System.currentTimeMillis();
         QueryManager manager = new QueryManager();
         manager.setConfigReader(new JsonConfigReader("file/relations.json"));
         manager.initialize();
@@ -32,5 +33,6 @@ public class App {
                 e.printStackTrace();
             }
         }
+        System.out.println(System.currentTimeMillis() - start);
     }
 }

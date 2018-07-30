@@ -1,4 +1,4 @@
-package com.ripple.query.selectfilter;
+package com.ripple.query;
 
 import com.ripple.database.Attribute;
 import org.apache.hadoop.io.Text;

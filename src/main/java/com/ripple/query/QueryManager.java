@@ -5,14 +5,14 @@ import com.ripple.database.*;
 import com.ripple.database.binop.BinOp;
 import com.ripple.query.selectfilter.FilterMapOperator;
 import com.ripple.query.selectfilter.SelectFilterTask;
-import com.ripple.query.selectfilter.NopReduceOperator;
 import com.ripple.query.selectfilter.SelectMapOperator;
 import com.ripple.util.Pair;
 import com.ripple.util.StringUtil;
-import com.ripple.util.TaskUtil;
+import com.ripple.util.SelectFilterTaskUtil;
 import com.ripple.database.value.FloatValue;
 import com.ripple.database.value.IntValue;
 import com.ripple.database.value.Value;
+import org.w3c.dom.Attr;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -109,14 +109,14 @@ public class QueryManager {
             }
         }
 
-        List<SelectFilterTask> tasks = new ArrayList<>();
+        List<SelectFilterTask> selectFilterTasks = new ArrayList<>();
 
         int tmpIndex = 0;
 
         for (String relationName : relations.keySet()) {
             SelectFilterTask task = new SelectFilterTask();
             Relation relation = relations.get(relationName);
-            task.inputPaths.add(getRelationPath(relation));
+            task.inputPath = getRelationPath(relation);
             task.outputPath = getTmpPath(date, tmpIndex);
             List<Attribute> originAttributes = relation.getAttributeMap().values().stream()
                     .sorted(Comparator.comparing(Attribute::getIndex)).collect(Collectors.toList());
@@ -125,37 +125,40 @@ public class QueryManager {
                 List<Attribute> selectAttributes = selectAttributeMap.get(relationName);
                 SelectMapOperator selectOp = new SelectMapOperator();
                 selectOp.setup(selectAttributes, originAttributes);
-                task.mapOperators.add(selectOp);
+                task.selectOperator = selectOp;
                 task.attributes = selectAttributes;
             }
             if (simpleConditionMap.containsKey(relationName)) {
                 List<Condition> simpleConditions = simpleConditionMap.get(relationName);
                 FilterMapOperator filterOp = new FilterMapOperator();
                 filterOp.setup(simpleConditions, task.attributes);
-                task.mapOperators.add(filterOp);
+                task.filterOperator = filterOp;
             }
-            task.reduceOperator = new NopReduceOperator();
-            tasks.add(task);
+            selectFilterTasks.add(task);
             ++tmpIndex;
         }
 
-        String outputPath = null;
+        SelectFilterTaskUtil.runTasks(selectFilterTasks);
 
-        if (tasks.size() == 1) {
-            SelectFilterTask task = tasks.get(0);
-            SelectMapOperator selectOp = new SelectMapOperator();
-            selectOp.setup(attributes, task.attributes);
-            task.mapOperators.add(selectOp);
-            task.attributes = attributes;
-            task.outputPath = getOutputPath(date);
-            outputPath = task.outputPath;
+        MapReduceTask lastJoinTask = null;
+
+        if (selectFilterTasks.size() == 1) {
+            lastJoinTask = selectFilterTasks.get(0);
         } else {
             // todo
         }
 
-        TaskUtil.runTasks(tasks);
+        SelectFilterTask finalTask = new SelectFilterTask();
+        finalTask.inputPath = lastJoinTask.outputPath;
+        finalTask.outputPath = getOutputPath(date);
+        finalTask.attributes = attributes;
+        SelectMapOperator selectOp = new SelectMapOperator();
+        selectOp.setup(attributes, lastJoinTask.attributes);
+        finalTask.selectOperator = selectOp;
 
-        Path path = Paths.get(outputPath + "/part-r-00000");
+        SelectFilterTaskUtil.runTask(finalTask);
+
+        Path path = Paths.get(finalTask.outputPath + "/part-r-00000");
         BufferedReader reader = Files.newBufferedReader(path);
         String line = null;
         while ((line = reader.readLine()) != null)
