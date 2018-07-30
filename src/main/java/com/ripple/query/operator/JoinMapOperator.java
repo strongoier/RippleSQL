@@ -32,8 +32,13 @@ public class JoinMapOperator {
         String[] tmp = config.split("\t");
         pathA = tmp[0];
         pathB = tmp[1];
-        indexsA = Arrays.stream(tmp[2].split(" ")).map(Integer::parseInt).toArray(Integer[]::new);
-        indexsB = Arrays.stream(tmp[3].split(" ")).map(Integer::parseInt).toArray(Integer[]::new);
+        if (tmp.length == 4) {
+            indexsA = Arrays.stream(tmp[2].split(" ")).map(Integer::parseInt).toArray(Integer[]::new);
+            indexsB = Arrays.stream(tmp[3].split(" ")).map(Integer::parseInt).toArray(Integer[]::new);
+        } else {
+            indexsA = new Integer[0];
+            indexsB = new Integer[0];
+        }
     }
 
     public void setup(MapReduceTask a, MapReduceTask b, List<Condition> conditions) {

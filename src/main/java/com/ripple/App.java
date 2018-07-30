@@ -17,7 +17,7 @@ public class App {
         manager.setConfigReader(new JsonConfigReader("file/relations.json"));
         manager.initialize();
         //BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        BufferedReader reader = new BufferedReader(Files.newBufferedReader(Paths.get("file/Test/in0_3.sql")));
+        BufferedReader reader = new BufferedReader(Files.newBufferedReader(Paths.get("file/Test/in1_0.sql")));
         while (true) {
             System.out.print("RippleSQL >> ");
             String line = reader.readLine();
