@@ -51,7 +51,15 @@ IDENTIFIER = ({LETTER}({LETTER}|{DIGIT}|_)*)
 "from"       { return Parser.FROM; }
 "where"      { return Parser.WHERE; }
 "and"        { return Parser.AND; }
-[;.,*]       { return yycharat(0); }
+"sum"        { return Parser.SUM; }
+"max"        { return Parser.MAX; }
+"min"        { return Parser.MIN; }
+"avg"        { return Parser.AVG; }
+"count"      { return Parser.COUNT; }
+"group"      { return Parser.GROUP; }
+"order"      { return Parser.ORDER; }
+"by"         { return Parser.BY; }
+[;.,*()]     { return yycharat(0); }
 "<"          { return Parser.LT; }
 "<="         { return Parser.LE; }
 ">"          { return Parser.GT; }

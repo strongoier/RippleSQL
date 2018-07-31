@@ -76,7 +76,9 @@ public class QueryManager {
 
     public void select(List<Attribute> uncheckedAttributes,
                        List<String> relationNames,
-                       List<Condition> uncheckedConditions) throws IOException {
+                       List<Condition> uncheckedConditions,
+                       List<Attribute> groupByAttributes,
+                       Attribute orderByAttribute) throws IOException {
         String date = StringUtil.getDate();
 
         checkActiveDatabase();
