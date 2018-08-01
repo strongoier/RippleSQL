@@ -22,7 +22,7 @@ public class SelectMapOperator {
         indexs = new Integer[selectAttributes.size()];
         for (int i = 0; i < selectAttributes.size(); ++i)
             for (int index = 0; index < attrs.size(); ++index)
-                if (selectAttributes.get(i).equals(attrs.get(index)))
+                if (selectAttributes.get(i).resembles(attrs.get(index)))
                     indexs[i] = index;
     }
 

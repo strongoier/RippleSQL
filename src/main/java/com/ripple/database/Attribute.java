@@ -30,8 +30,10 @@ public class Attribute {
     }
 
     public void setRelationName(String relationName) {
-        if (this.relationName != null)
-            throw new RuntimeException(String.format("Reset Attribute(%s:%s)'s Relation!!!", this.relationName, this.attributeName));
+        if (this.relationName != null) {
+            if (!this.relationName.equals(relationName))
+                throw new RuntimeException(String.format("Reset Attribute(%s:%s)'s Relation!!!", this.relationName, this.attributeName));
+        }
         this.relationName = relationName;
     }
 
@@ -79,5 +81,9 @@ public class Attribute {
         if (relationName.equals(attr.relationName) && attributeName.equals(attr.attributeName) && func == attr.func)
             return true;
         return false;
+    }
+
+    public boolean resembles(Attribute a) {
+        return relationName.equals(a.relationName) && attributeName.equals(a.attributeName);
     }
 }

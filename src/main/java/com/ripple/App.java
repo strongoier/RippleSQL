@@ -6,6 +6,7 @@ import com.ripple.frontend.Parser;
 import com.ripple.query.QueryManager;
 
 import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -16,8 +17,8 @@ public class App {
         QueryManager manager = new QueryManager();
         manager.setConfigReader(new JsonConfigReader("file/relations.json"));
         manager.initialize();
-        //BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        BufferedReader reader = new BufferedReader(Files.newBufferedReader(Paths.get("file/Test/in1_0.sql")));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        //BufferedReader reader = new BufferedReader(Files.newBufferedReader(Paths.get("file/Test/in1_2.sql")));
         while (true) {
             System.out.print("RippleSQL >> ");
             String line = reader.readLine();

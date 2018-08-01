@@ -4,12 +4,7 @@ import com.ripple.database.Attribute;
 import com.ripple.util.Pair;
 import org.apache.hadoop.io.Text;
 
-import java.util.ArrayList;
 import java.util.List;
-
-/*
-    RelationName\tAttributeName\tValueClassName\tindex
- */
 
 public class SetKeyOperator {
     private int index = -1;
@@ -19,23 +14,17 @@ public class SetKeyOperator {
         return String.format("%d", index);
     }
 
-    public void fromString(String config) throws ClassNotFoundException {
+    public void fromString(String config) {
         index = Integer.parseInt(config);
     }
 
-    public List<Attribute> setup(Attribute keyAttribute, List<Attribute> attrs) {
-        List<Attribute> attributes = new ArrayList<>();
-        attributes.add(null);
+    public void setup(Attribute keyAttribute, List<Attribute> attrs) {
         for (int i = 0; i < attrs.size(); ++i) {
-            Attribute attr = attrs.get(i);
-            if (attr.equals(keyAttribute)) {
+            if (attrs.get(i).equals(keyAttribute)) {
                 index = i;
-                attributes.set(0, attr);
-            } else {
-                attributes.add(attr);
+                break;
             }
         }
-        return attributes;
     }
 
     public boolean hasSetup() {
@@ -47,8 +36,7 @@ public class SetKeyOperator {
             Text key = new Text(values[index]);
             StringBuilder valueBuilder = new StringBuilder();
             for (int i = 0; i < values.length; ++i)
-                if (i != index)
-                    valueBuilder.append(values[i]).append('\t');
+                valueBuilder.append(values[i]).append('\t');
             Text value = new Text(valueBuilder.toString());
             return new Pair<>(key, value);
         } else {

@@ -3,19 +3,14 @@ package com.ripple.query;
 import com.ripple.config.ConfigReader;
 import com.ripple.database.*;
 import com.ripple.database.binop.BinOp;
-import com.ripple.query.operator.JoinMapOperator;
-import com.ripple.query.task.JoinTask;
-import com.ripple.query.operator.FilterOperator;
-import com.ripple.query.task.SelectFilterTask;
-import com.ripple.query.operator.SelectMapOperator;
-import com.ripple.query.task.MapReduceTask;
-import com.ripple.util.JoinTaskUtil;
-import com.ripple.util.Pair;
-import com.ripple.util.StringUtil;
-import com.ripple.util.SelectFilterTaskUtil;
+import com.ripple.database.func.Func;
+import com.ripple.query.operator.*;
+import com.ripple.query.task.*;
+import com.ripple.util.*;
 import com.ripple.database.value.FloatValue;
 import com.ripple.database.value.IntValue;
 import com.ripple.database.value.Value;
+import org.w3c.dom.Attr;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -77,8 +72,8 @@ public class QueryManager {
     public void select(List<Attribute> uncheckedAttributes,
                        List<String> relationNames,
                        List<Condition> uncheckedConditions,
-                       List<Attribute> groupByAttributes,
-                       Attribute orderByAttribute) throws IOException {
+                       List<Attribute> uncheckedGroupByAttributes,
+                       Attribute uncheckedOrderByAttribute) throws IOException {
         String date = StringUtil.getDate();
 
         checkActiveDatabase();
@@ -88,6 +83,9 @@ public class QueryManager {
         uncheckedAttributes.clear();
         List<Condition> conditions = checkConditions(uncheckedConditions, relations);
         uncheckedConditions.clear();
+        boolean hasGroupByFunc = checkGroupByAttributes(uncheckedGroupByAttributes, relations, attributes);
+        uncheckedGroupByAttributes.clear();
+        Attribute orderByAttribute = checkOrderByAttribute(uncheckedOrderByAttribute, relations, attributes);
 
         Map<String, List<Attribute>> selectAttributeMap = new HashMap<>();
         Map<String, List<Condition>> simpleConditionMap = new HashMap<>();
@@ -200,15 +198,60 @@ public class QueryManager {
             }
         }
 
-        SelectFilterTask finalTask = new SelectFilterTask();
-        finalTask.inputPaths.add(lastJoinTask.outputPath);
-        finalTask.outputPath = getOutputPath(date);
-        finalTask.attributes = attributes;
-        SelectMapOperator selectOp = new SelectMapOperator();
-        selectOp.setup(attributes, lastJoinTask.attributes);
-        finalTask.selectOperator = selectOp;
+        MapReduceTask finalTask = null;
+        if (!hasGroupByFunc) {
+            SelectFilterTask selectFilterTask = new SelectFilterTask();
+            selectFilterTask.inputPaths.add(lastJoinTask.outputPath);
+            //selectFilterTask.outputPath = getOutputPath(date);
+            selectFilterTask.outputPath = getTmpPath(date, tmpIndex);
+            ++tmpIndex;
+            selectFilterTask.attributes = attributes;
+            SelectMapOperator selectOp = new SelectMapOperator();
+            selectOp.setup(attributes, lastJoinTask.attributes);
+            selectFilterTask.selectOperator = selectOp;
+            SelectFilterTaskUtil.runTask(selectFilterTask);
+            finalTask = selectFilterTask;
+        } else {
+            GroupByFuncTask groupByFuncTask = new GroupByFuncTask();
+            groupByFuncTask.inputPaths.add(lastJoinTask.outputPath);
+            groupByFuncTask.outputPath = getTmpPath(date, tmpIndex);
+            ++tmpIndex;
+            groupByFuncTask.attributes = attributes;
+            SelectMapOperator selectValueOp = new SelectMapOperator();
+            selectValueOp.setup(attributes, lastJoinTask.attributes);
+            groupByFuncTask.selectValueOperator = selectValueOp;
+            SelectMapOperator selectKeyOp = null;
+            List<Attribute> groupByAttributes = new ArrayList<>();
+            for (Attribute attribute : attributes) {
+                if (attribute.getFunc() == null) {
+                    groupByAttributes.add(attribute);
+                }
+            }
+            if (!groupByAttributes.isEmpty()) {
+                selectKeyOp = new SelectMapOperator();
+                selectKeyOp.setup(groupByAttributes, lastJoinTask.attributes);
+            }
+            groupByFuncTask.selectKeyOperator = selectKeyOp;
+            FuncOperator funcOp = new FuncOperator();
+            funcOp.setup(attributes);
+            groupByFuncTask.funcOperator = funcOp;
+            GroupByFuncTaskUtil.runTask(groupByFuncTask);
+            finalTask = groupByFuncTask;
+        }
 
-        SelectFilterTaskUtil.runTask(finalTask);
+        if (orderByAttribute != null) {
+            OrderByTask orderByTask = new OrderByTask();
+            orderByTask.inputPaths.add(finalTask.outputPath);
+            orderByTask.outputPath = getTmpPath(date, tmpIndex);
+            ++tmpIndex;
+            orderByTask.attributes = attributes;
+            SetKeyOperator setKeyOp = new SetKeyOperator();
+            setKeyOp.setup(orderByAttribute, attributes);
+            orderByTask.setKeyOperator = setKeyOp;
+            orderByTask.orderByType = orderByAttribute.getType();
+            OrderByTaskUtil.runTask(orderByTask);
+            finalTask = orderByTask;
+        }
 
         Path path = Paths.get(finalTask.outputPath + "/part-r-00000");
         BufferedReader reader = Files.newBufferedReader(path);
@@ -243,15 +286,34 @@ public class QueryManager {
     }
 
     private List<Attribute> checkAttributes(List<Attribute> uncheckedAttributes, Map<String, Relation> relations) {
-        if (uncheckedAttributes.size() == 1 && uncheckedAttributes.get(0).getAttributeName().equals("*")) {
-            List<Attribute> attributes = new ArrayList<>();
-            for (Relation relation : relations.values())
-                attributes.addAll(relation.getAttributeMap().values());
-            return attributes;
-        }
         List<Attribute> attributes = new ArrayList<>();
         for (Attribute uncheckedAttribute : uncheckedAttributes) {
-            attributes.add(checkAttribute(uncheckedAttribute, relations));
+            if (uncheckedAttribute.getAttributeName().equals("*")) {
+                String relationName = uncheckedAttribute.getRelationName();
+                if (relationName == null) {
+                    for (Relation relation : relations.values()) {
+                        attributes.addAll(relation.getAttributeMap().values());
+                    }
+                } else {
+                    if (!relations.containsKey(relationName)) {
+                        throw new RuntimeException(String.format("No Such Relation(%s:%s) in SQL From Statement!!!",
+                                relationName, "*"));
+                    }
+                    attributes.addAll(relations.get(relationName).getAttributeMap().values());
+                }
+            } else {
+                Attribute attribute = checkAttribute(uncheckedAttribute, relations);
+                uncheckedAttribute.setRelationName(attribute.getRelationName());
+                uncheckedAttribute.setIndex(attribute.getIndex());
+                uncheckedAttribute.setType(attribute.getType());
+                attribute = uncheckedAttribute;
+                Func func = attribute.getFunc();
+                if (func != null && !func.compatibleWith(attribute.getType())) {
+                    throw new RuntimeException(String.format("Function %s(%s:%s) with invalid type!!!",
+                            func, attribute.getRelationName(), attribute.getAttributeName()));
+                }
+                attributes.add(attribute);
+            }
         }
         return attributes;
     }
@@ -292,7 +354,7 @@ public class QueryManager {
         if (uncheckedCondition.isRightIsAttribute()) {
             Attribute rightAttribute = checkAttribute(uncheckedCondition.getRightAttribute(), relations);
             if (leftAttribute.getType() != rightAttribute.getType())
-                throw new RuntimeException(String.format("Not Same Type between Attribute(%s:%s) and Value(%s)",
+                throw new RuntimeException(String.format("Not Same Type between Attribute(%s:%s) and Attribute(%s:%s)",
                         leftAttribute.getRelationName(), leftAttribute.getAttributeName(),
                         rightAttribute.getRelationName(), rightAttribute.getAttributeName()));
             condition = new Condition(leftAttribute, binOp, rightAttribute);
@@ -310,8 +372,84 @@ public class QueryManager {
         return condition;
     }
 
+    private boolean checkGroupByAttributes(List<Attribute> uncheckedGroupByAttributes, Map<String, Relation> relations, List<Attribute> attributes) {
+        boolean hasGroupByFunc = !uncheckedGroupByAttributes.isEmpty();
+        if (!hasGroupByFunc) {
+            for (Attribute attribute : attributes) {
+                if (attribute.getFunc() != null) {
+                    hasGroupByFunc = true;
+                    break;
+                }
+            }
+            if (!hasGroupByFunc) {
+                return false;
+            }
+        }
+        List<Attribute> groupByAttributes = new ArrayList<>();
+        for (Attribute uncheckedGroupByAttribute : uncheckedGroupByAttributes) {
+            Attribute groupByAttribute = checkAttribute(uncheckedGroupByAttribute, relations);
+            boolean found = false;
+            for (Attribute attribute : attributes) {
+                if (attribute.equals(groupByAttribute)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                throw new RuntimeException(String.format("Group by attribute(%s:%s) is not in select clause",
+                        groupByAttribute.getRelationName(), groupByAttribute.getAttributeName()));
+            }
+            groupByAttributes.add(groupByAttribute);
+        }
+        for (Attribute attribute : attributes) {
+            if (attribute.getFunc() == null) {
+                boolean found = false;
+                for (Attribute groupByAttribute : groupByAttributes) {
+                    if (attribute.equals(groupByAttribute)) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    throw new RuntimeException(String.format("Select attribute(%s:%s) is in neither function nor group by clause",
+                            attribute.getRelationName(), attribute.getAttributeName()));
+                }
+            }
+        }
+        return true;
+    }
+
+    private Attribute checkOrderByAttribute(Attribute uncheckedOrderByAttribute, Map<String, Relation> relations, List<Attribute> attributes) {
+        if (uncheckedOrderByAttribute == null) {
+            return null;
+        }
+        Attribute orderByAttribute = checkAttribute(uncheckedOrderByAttribute, relations);
+        uncheckedOrderByAttribute.setRelationName(orderByAttribute.getRelationName());
+        uncheckedOrderByAttribute.setIndex(orderByAttribute.getIndex());
+        uncheckedOrderByAttribute.setType(orderByAttribute.getType());
+        orderByAttribute = uncheckedOrderByAttribute;
+        Func func = orderByAttribute.getFunc();
+        if (func != null && !func.compatibleWith(orderByAttribute.getType())) {
+            throw new RuntimeException(String.format("Function %s(%s:%s) with invalid type!!!",
+                    func, orderByAttribute.getRelationName(), orderByAttribute.getAttributeName()));
+        }
+        boolean found = false;
+        for (Attribute attribute : attributes) {
+            if (attribute.equals(orderByAttribute)) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            throw new RuntimeException(String.format("Order by attribute(%s:%s) is not in select clause",
+                    orderByAttribute.getRelationName(), orderByAttribute.getAttributeName()));
+        }
+        return orderByAttribute;
+    }
+
     private void classifyAttribute(Attribute attribute, Map<String, List<Attribute>> relationAttributeMap) {
         String relationName = attribute.getRelationName();
+        attribute = activeDatabase.getAttribute(relationName, attribute.getAttributeName()).getValue();
         if (!relationAttributeMap.containsKey(relationName))
             relationAttributeMap.put(relationName, new ArrayList<>());
         List<Attribute> relationAttributes = relationAttributeMap.get(relationName);
