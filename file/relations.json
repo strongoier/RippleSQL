@@ -1,4 +1,5 @@
 {
+  "work-directory": "file/",
   "databases": [
     {
       "name": "Sky",

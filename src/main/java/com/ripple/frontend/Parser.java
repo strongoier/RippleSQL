@@ -6,7 +6,7 @@ package com.ripple.frontend;
 
 import com.ripple.database.*;
 import com.ripple.database.binop.*;
-import com.ripple.database.func.*;
+import com.ripple.database.function.*;
 import com.ripple.database.value.*;
 import com.ripple.query.*;
 
@@ -233,13 +233,13 @@ public class Parser {
 //t    "attr_list : attr",
 //t    "opt_order_by_clause : ORDER BY func_or_attr",
 //t    "opt_order_by_clause : nothing",
-//t    "func_or_attr : func '(' attr ')'",
+//t    "func_or_attr : function '(' attr ')'",
 //t    "func_or_attr : attr",
-//t    "func : SUM",
-//t    "func : MAX",
-//t    "func : MIN",
-//t    "func : AVG",
-//t    "func : COUNT",
+//t    "function : SUM",
+//t    "function : MAX",
+//t    "function : MIN",
+//t    "function : AVG",
+//t    "function : COUNT",
 //t    "attr : IDENTIFIER '.' IDENTIFIER",
 //t    "attr : IDENTIFIER",
 //t    "nothing :",
@@ -667,7 +667,7 @@ case 34:
 					// line 212 "src/main/java/com/ripple/frontend/Parser.jay"
   {
     yyVal = ((Attribute)yyVals[-1+yyTop]);
-    ((Attribute)yyVal).setFunc(((Func)yyVals[-3+yyTop]));
+    ((Attribute)yyVal).setFunction(((Function)yyVals[-3+yyTop]));
   }
   break;
 case 35:
@@ -679,31 +679,31 @@ case 35:
 case 36:
 					// line 223 "src/main/java/com/ripple/frontend/Parser.jay"
   {
-    yyVal = Func.sumFunc;
+    yyVal = Function.sumFunc;
   }
   break;
 case 37:
 					// line 227 "src/main/java/com/ripple/frontend/Parser.jay"
   {
-    yyVal = Func.maxFunc;
+    yyVal = Function.maxFunc;
   }
   break;
 case 38:
 					// line 231 "src/main/java/com/ripple/frontend/Parser.jay"
   {
-    yyVal = Func.minFunc;
+    yyVal = Function.minFunc;
   }
   break;
 case 39:
 					// line 235 "src/main/java/com/ripple/frontend/Parser.jay"
   {
-    yyVal = Func.avgFunc;
+    yyVal = Function.avgFunc;
   }
   break;
 case 40:
 					// line 239 "src/main/java/com/ripple/frontend/Parser.jay"
   {
-    yyVal = Func.countFunc;
+    yyVal = Function.countFunc;
   }
   break;
 case 41:

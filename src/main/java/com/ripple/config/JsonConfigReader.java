@@ -67,4 +67,10 @@ public class JsonConfigReader extends ConfigReader {
         }
         return databaseMap;
     }
+
+    @Override
+    public String getWorkDirectory() throws IOException {
+        String configuration = StringUtil.removeSpaces(FilesUtil.readAll(configJsonFile));
+        return new JSONObject(configuration).getString("work-directory");
+    }
 }

@@ -1,9 +1,8 @@
 package com.ripple.query.operator;
 
 import com.ripple.database.Attribute;
-import com.ripple.database.func.Func;
+import com.ripple.database.function.Function;
 import com.ripple.database.value.Value;
-import org.apache.commons.collections.ArrayStack;
 import org.apache.hadoop.io.Text;
 
 import java.lang.reflect.Constructor;
@@ -14,12 +13,12 @@ import java.util.stream.Collectors;
 
 public class FuncOperator {
     private static class FuncInfo {
-        Func func;
+        Function function;
         Class type;
 
         public String toString() {
             StringBuilder builder = new StringBuilder()
-                    .append(func == null ? "null" : func.getClass().getName()).append(' ')
+                    .append(function == null ? "null" : function.getClass().getName()).append(' ')
                     .append(type.getName());
             return builder.toString();
         }
@@ -29,12 +28,12 @@ public class FuncOperator {
             try {
                 type = Class.forName(configs[1]);
                 if (configs[0].equals("null")) {
-                    func = null;
+                    function = null;
                 } else {
                     Class funcClass = Class.forName(configs[0]);
                     Constructor funcConstructor = funcClass.getDeclaredConstructor();
                     funcConstructor.setAccessible(true);
-                    func = (Func) funcConstructor.newInstance();
+                    function = (Function) funcConstructor.newInstance();
                 }
             } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
                 throw new RuntimeException(e.getClass().getName() + " " + e.getCause() + " " + config);
@@ -42,7 +41,7 @@ public class FuncOperator {
         }
 
         public String map(List<String> values) {
-            if (func == null) {
+            if (function == null) {
                 return values.get(0);
             }
             Value[] realValues = new Value[values.size()];
@@ -54,7 +53,7 @@ public class FuncOperator {
             } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
                 throw new RuntimeException(e.getClass().getName() + " " + e.getCause());
             }
-            return func.map(realValues).toString();
+            return function.map(realValues).toString();
         }
     }
 
@@ -77,7 +76,7 @@ public class FuncOperator {
         funcInfos = new ArrayList<>();
         for (Attribute attribute : attributes) {
             FuncInfo funcInfo = new FuncInfo();
-            funcInfo.func = attribute.getFunc();
+            funcInfo.function = attribute.getFunction();
             funcInfo.type = attribute.getType();
             funcInfos.add(funcInfo);
         }

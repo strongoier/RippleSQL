@@ -1,20 +1,20 @@
 package com.ripple.database;
 
-import com.ripple.database.func.Func;
+import com.ripple.database.function.Function;
 
 public class Attribute {
     private String relationName;
     private String attributeName;
     private int index;
     private Class type;
-    private Func func;
+    private Function function;
 
     public Attribute(String attrName) {
         relationName = null;
         attributeName = attrName;
         index = -1;
         type = null;
-        func = null;
+        function = null;
     }
 
     public Attribute(String relName, String attrName) {
@@ -22,7 +22,7 @@ public class Attribute {
         attributeName = attrName;
         index = -1;
         type = null;
-        func = null;
+        function = null;
     }
 
     public String getRelationName() {
@@ -57,12 +57,12 @@ public class Attribute {
         this.type = type;
     }
 
-    public Func getFunc() {
-        return func;
+    public Function getFunction() {
+        return function;
     }
 
-    public void setFunc(Func func) {
-        this.func = func;
+    public void setFunction(Function function) {
+        this.function = function;
     }
 
     @Override
@@ -78,7 +78,7 @@ public class Attribute {
         if (!(o instanceof Attribute))
             return false;
         Attribute attr = (Attribute) o;
-        if (relationName.equals(attr.relationName) && attributeName.equals(attr.attributeName) && func == attr.func)
+        if (relationName.equals(attr.relationName) && attributeName.equals(attr.attributeName) && function == attr.function)
             return true;
         return false;
     }

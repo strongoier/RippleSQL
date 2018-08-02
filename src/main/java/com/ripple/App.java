@@ -4,6 +4,8 @@ import com.ripple.config.JsonConfigReader;
 import com.ripple.frontend.Lexer;
 import com.ripple.frontend.Parser;
 import com.ripple.query.QueryManager;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.util.GenericOptionsParser;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -13,12 +15,17 @@ import java.nio.file.Paths;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        long start = System.currentTimeMillis();
+        Configuration config = new GenericOptionsParser(args).getConfiguration();
+        String configPath = config.get("config.path", "relations.json");
+        String sqlPath = config.get("sql.path");
         QueryManager manager = new QueryManager();
-        manager.setConfigReader(new JsonConfigReader("file/relations.json"));
+        manager.setConfigReader(new JsonConfigReader(configPath));
         manager.initialize();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        //BufferedReader reader = new BufferedReader(Files.newBufferedReader(Paths.get("file/Test/in1_2.sql")));
+        BufferedReader reader = null;
+        if (sqlPath == null)
+            reader = new BufferedReader(new InputStreamReader(System.in));
+        else
+            reader = Files.newBufferedReader(Paths.get(sqlPath));
         while (true) {
             System.out.print("RippleSQL >> ");
             String line = reader.readLine();
@@ -30,10 +37,7 @@ public class App {
                 parser.yyparse(lexer);
             } catch (RuntimeException e) {
                 e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
-        System.out.println(System.currentTimeMillis() - start);
     }
 }

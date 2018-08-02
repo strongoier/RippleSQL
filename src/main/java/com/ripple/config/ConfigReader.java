@@ -7,4 +7,5 @@ import java.util.Map;
 
 public abstract class ConfigReader {
     public abstract Map<String, Database> getDatabases() throws IOException;
+    public abstract String getWorkDirectory() throws IOException;
 }

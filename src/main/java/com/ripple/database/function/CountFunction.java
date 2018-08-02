@@ -1,9 +1,9 @@
-package com.ripple.database.func;
+package com.ripple.database.function;
 
 import com.ripple.database.value.IntValue;
 import com.ripple.database.value.Value;
 
-public class CountFunc implements Func {
+public class CountFunction implements Function {
     @Override
     public boolean compatibleWith(Class cls) {
         return true;

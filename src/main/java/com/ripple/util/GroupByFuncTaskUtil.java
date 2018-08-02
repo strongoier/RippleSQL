@@ -53,7 +53,7 @@ public class GroupByFuncTaskUtil {
             protected void setup(Context context) throws IOException, InterruptedException {
                 super.setup(context);
                 Configuration conf = context.getConfiguration();
-                String funcOpConfig = conf.get("job.reduce.func");
+                String funcOpConfig = conf.get("job.reduce.function");
                 funcOp = new FuncOperator();
                 funcOp.fromString(funcOpConfig);
                 setKeyOp = new SetKeyOperator();
@@ -70,7 +70,7 @@ public class GroupByFuncTaskUtil {
         if (task.selectKeyOperator != null) {
             conf.set("job.map.selectKey", task.selectKeyOperator.toString());
         }
-        conf.set("job.reduce.func", task.funcOperator.toString());
+        conf.set("job.reduce.function", task.funcOperator.toString());
         Job job = Job.getInstance(conf);
         job.setJarByClass(GroupByFuncTaskUtil.class);
         job.setMapperClass(mapperClass);

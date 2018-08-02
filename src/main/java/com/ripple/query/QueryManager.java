@@ -3,20 +3,15 @@ package com.ripple.query;
 import com.ripple.config.ConfigReader;
 import com.ripple.database.*;
 import com.ripple.database.binop.BinOp;
-import com.ripple.database.func.Func;
+import com.ripple.database.function.Function;
 import com.ripple.query.operator.*;
 import com.ripple.query.task.*;
 import com.ripple.util.*;
 import com.ripple.database.value.FloatValue;
 import com.ripple.database.value.IntValue;
 import com.ripple.database.value.Value;
-import org.w3c.dom.Attr;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -24,10 +19,13 @@ public class QueryManager {
     private ConfigReader configReader;
     private Map<String, Database> databaseMap;
     private Database activeDatabase;
+    private String workDirectory;
 
     public QueryManager() {
         configReader = null;
         databaseMap = null;
+        activeDatabase = null;
+        workDirectory = null;
     }
 
     public void setConfigReader(ConfigReader configReader) {
@@ -37,6 +35,7 @@ public class QueryManager {
     public void initialize() throws IOException {
         checkConfigReader();
         databaseMap = configReader.getDatabases();
+        workDirectory = configReader.getWorkDirectory();
     }
 
     public void showDatabases() {
@@ -143,66 +142,60 @@ public class QueryManager {
 
         SelectFilterTaskUtil.runTasks(selectFilterTasks);
 
-        MapReduceTask lastJoinTask = null;
-
-        if (selectFilterTasks.size() == 1) {
-            lastJoinTask = selectFilterTasks.get(0);
-        } else {
-            PriorityQueue<MapReduceTask> needJoinRelations = new PriorityQueue<>(selectFilterTasks.size(),
-                    Comparator.comparing(task->task.lines));
-            needJoinRelations.addAll(selectFilterTasks);
-            while (needJoinRelations.size() > 1) {
-                MapReduceTask a = needJoinRelations.poll();
-                MapReduceTask b = needJoinRelations.poll();
-                List<Condition> equalConditionsBetweenAB = new ArrayList<>();
-                List<Condition> notEqualConditionsBetweenAB = new ArrayList<>();
-                List<Condition> remainEqualConditions = new ArrayList<>();
-                List<Condition> remainNotEqualConditions = new ArrayList<>();
-                for (Condition condition : equalConditionList) {
-                    Attribute left = condition.getLeftAttribute();
-                    Attribute right = condition.getRightAttribute();
-                    if ((a.attributes.contains(left) && b.attributes.contains(right))
-                            || (a.attributes.contains(right) && b.attributes.contains(left)))
-                        equalConditionsBetweenAB.add(condition);
-                    else
-                        remainEqualConditions.add(condition);
-                }
-                for (Condition condition : notEqualConditionList) {
-                    Attribute left = condition.getLeftAttribute();
-                    Attribute right = condition.getRightAttribute();
-                    if ((a.attributes.contains(left) && b.attributes.contains(right))
-                            || (a.attributes.contains(right) && b.attributes.contains(left)))
-                        notEqualConditionsBetweenAB.add(condition);
-                    else
-                        remainNotEqualConditions.add(condition);
-                }
-                equalConditionList = remainEqualConditions;
-                notEqualConditionList = remainNotEqualConditions;
-                JoinTask task = new JoinTask();
-                task.inputPaths.add(a.outputPath);
-                task.inputPaths.add(b.outputPath);
-                task.outputPath = getTmpPath(date, tmpIndex);
-                ++tmpIndex;
-                task.attributes = new ArrayList<>();
-                task.attributes.addAll(a.attributes);
-                task.attributes.addAll(b.attributes);
-                task.joinMapOperator = new JoinMapOperator();
-                task.joinMapOperator.setup(a, b, equalConditionsBetweenAB);
-                if (notEqualConditionsBetweenAB.size() != 0) {
-                    task.filterOperator = new FilterOperator();
-                    task.filterOperator.setup(notEqualConditionsBetweenAB, task.attributes);
-                }
-                JoinTaskUtil.runTask(task);
-                needJoinRelations.offer(task);
-                lastJoinTask = task;
+        PriorityQueue<MapReduceTask> needJoinRelations = new PriorityQueue<>(selectFilterTasks.size(),
+                Comparator.comparing(task -> task.lines));
+        needJoinRelations.addAll(selectFilterTasks);
+        while (needJoinRelations.size() > 1) {
+            MapReduceTask a = needJoinRelations.poll();
+            MapReduceTask b = needJoinRelations.poll();
+            List<Condition> equalConditionsBetweenAB = new ArrayList<>();
+            List<Condition> notEqualConditionsBetweenAB = new ArrayList<>();
+            List<Condition> remainEqualConditions = new ArrayList<>();
+            List<Condition> remainNotEqualConditions = new ArrayList<>();
+            for (Condition condition : equalConditionList) {
+                Attribute left = condition.getLeftAttribute();
+                Attribute right = condition.getRightAttribute();
+                if ((a.attributes.contains(left) && b.attributes.contains(right))
+                        || (a.attributes.contains(right) && b.attributes.contains(left)))
+                    equalConditionsBetweenAB.add(condition);
+                else
+                    remainEqualConditions.add(condition);
             }
+            for (Condition condition : notEqualConditionList) {
+                Attribute left = condition.getLeftAttribute();
+                Attribute right = condition.getRightAttribute();
+                if ((a.attributes.contains(left) && b.attributes.contains(right))
+                        || (a.attributes.contains(right) && b.attributes.contains(left)))
+                    notEqualConditionsBetweenAB.add(condition);
+                else
+                    remainNotEqualConditions.add(condition);
+            }
+            equalConditionList = remainEqualConditions;
+            notEqualConditionList = remainNotEqualConditions;
+            JoinTask task = new JoinTask();
+            task.inputPaths.add(a.outputPath);
+            task.inputPaths.add(b.outputPath);
+            task.outputPath = getTmpPath(date, tmpIndex);
+            ++tmpIndex;
+            task.attributes = new ArrayList<>();
+            task.attributes.addAll(a.attributes);
+            task.attributes.addAll(b.attributes);
+            task.joinMapOperator = new JoinMapOperator();
+            task.joinMapOperator.setup(a, b, equalConditionsBetweenAB);
+            if (notEqualConditionsBetweenAB.size() != 0) {
+                task.filterOperator = new FilterOperator();
+                task.filterOperator.setup(notEqualConditionsBetweenAB, task.attributes);
+            }
+            JoinTaskUtil.runTask(task);
+            needJoinRelations.offer(task);
         }
+
+        MapReduceTask lastJoinTask = needJoinRelations.poll();
 
         MapReduceTask finalTask = null;
         if (!hasGroupByFunc) {
             SelectFilterTask selectFilterTask = new SelectFilterTask();
             selectFilterTask.inputPaths.add(lastJoinTask.outputPath);
-            //selectFilterTask.outputPath = getOutputPath(date);
             selectFilterTask.outputPath = getTmpPath(date, tmpIndex);
             ++tmpIndex;
             selectFilterTask.attributes = attributes;
@@ -223,7 +216,7 @@ public class QueryManager {
             SelectMapOperator selectKeyOp = null;
             List<Attribute> groupByAttributes = new ArrayList<>();
             for (Attribute attribute : attributes) {
-                if (attribute.getFunc() == null) {
+                if (attribute.getFunction() == null) {
                     groupByAttributes.add(attribute);
                 }
             }
@@ -253,12 +246,7 @@ public class QueryManager {
             finalTask = orderByTask;
         }
 
-        Path path = Paths.get(finalTask.outputPath + "/part-r-00000");
-        BufferedReader reader = Files.newBufferedReader(path);
-        String line = null;
-        while ((line = reader.readLine()) != null)
-            System.out.println(line);
-        reader.close();
+        FilesUtil.displayOutput(finalTask);
     }
 
     private void checkConfigReader() {
@@ -307,10 +295,10 @@ public class QueryManager {
                 uncheckedAttribute.setIndex(attribute.getIndex());
                 uncheckedAttribute.setType(attribute.getType());
                 attribute = uncheckedAttribute;
-                Func func = attribute.getFunc();
-                if (func != null && !func.compatibleWith(attribute.getType())) {
+                Function function = attribute.getFunction();
+                if (function != null && !function.compatibleWith(attribute.getType())) {
                     throw new RuntimeException(String.format("Function %s(%s:%s) with invalid type!!!",
-                            func, attribute.getRelationName(), attribute.getAttributeName()));
+                            function, attribute.getRelationName(), attribute.getAttributeName()));
                 }
                 attributes.add(attribute);
             }
@@ -376,7 +364,7 @@ public class QueryManager {
         boolean hasGroupByFunc = !uncheckedGroupByAttributes.isEmpty();
         if (!hasGroupByFunc) {
             for (Attribute attribute : attributes) {
-                if (attribute.getFunc() != null) {
+                if (attribute.getFunction() != null) {
                     hasGroupByFunc = true;
                     break;
                 }
@@ -402,7 +390,7 @@ public class QueryManager {
             groupByAttributes.add(groupByAttribute);
         }
         for (Attribute attribute : attributes) {
-            if (attribute.getFunc() == null) {
+            if (attribute.getFunction() == null) {
                 boolean found = false;
                 for (Attribute groupByAttribute : groupByAttributes) {
                     if (attribute.equals(groupByAttribute)) {
@@ -428,10 +416,10 @@ public class QueryManager {
         uncheckedOrderByAttribute.setIndex(orderByAttribute.getIndex());
         uncheckedOrderByAttribute.setType(orderByAttribute.getType());
         orderByAttribute = uncheckedOrderByAttribute;
-        Func func = orderByAttribute.getFunc();
-        if (func != null && !func.compatibleWith(orderByAttribute.getType())) {
+        Function function = orderByAttribute.getFunction();
+        if (function != null && !function.compatibleWith(orderByAttribute.getType())) {
             throw new RuntimeException(String.format("Function %s(%s:%s) with invalid type!!!",
-                    func, orderByAttribute.getRelationName(), orderByAttribute.getAttributeName()));
+                    function, orderByAttribute.getRelationName(), orderByAttribute.getAttributeName()));
         }
         boolean found = false;
         for (Attribute attribute : attributes) {
@@ -467,14 +455,10 @@ public class QueryManager {
     }
 
     private String getRelationPath(Relation relation) {
-        return "file/Database/" + activeDatabase.getName() + "/" + relation.getName();
+        return workDirectory + "Database/" + activeDatabase.getName() + "/" + relation.getName();
     }
 
     private String getTmpPath(String date, int index) {
-        return "file/Tmp/" + date + "-" + index;
-    }
-
-    private String getOutputPath(String date) {
-        return "file/Result/" + date;
+        return workDirectory + "Tmp/" + date + "-" + index;
     }
 }

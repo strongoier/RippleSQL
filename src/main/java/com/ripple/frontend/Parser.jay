@@ -3,7 +3,7 @@ package com.ripple.frontend;
 
 import com.ripple.database.*;
 import com.ripple.database.binop.*;
-import com.ripple.database.func.*;
+import com.ripple.database.function.*;
 import com.ripple.database.value.*;
 import com.ripple.query.*;
 
@@ -39,7 +39,7 @@ public class Parser {
 %type <List<Attribute>> attr_list
 %type <Attribute> opt_order_by_clause
 %type <Attribute> func_or_attr
-%type <Func> func
+%type <Function> function
 %type <Attribute> attr
 
 %start command
@@ -208,36 +208,36 @@ opt_order_by_clause
   }
 
 func_or_attr
-  : func '(' attr ')'
+  : function '(' attr ')'
   {
     $$ = $3;
-    $<Attribute>$.setFunc($1);
+    $<Attribute>$.setFunction($1);
   }
   | attr
   {
     $$ = $1;
   }
 
-func
+function
   : SUM
   {
-    $$ = Func.sumFunc;
+    $$ = Function.sumFunc;
   }
   | MAX
   {
-    $$ = Func.maxFunc;
+    $$ = Function.maxFunc;
   }
   | MIN
   {
-    $$ = Func.minFunc;
+    $$ = Function.minFunc;
   }
   | AVG
   {
-    $$ = Func.avgFunc;
+    $$ = Function.avgFunc;
   }
   | COUNT
   {
-    $$ = Func.countFunc;
+    $$ = Function.countFunc;
   }
 
 attr

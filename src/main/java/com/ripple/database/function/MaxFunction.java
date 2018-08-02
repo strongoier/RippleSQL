@@ -1,8 +1,8 @@
-package com.ripple.database.func;
+package com.ripple.database.function;
 
 import com.ripple.database.value.Value;
 
-public class MinFunc implements Func {
+public class MaxFunction implements Function {
     @Override
     public boolean compatibleWith(Class cls) {
         return true;
@@ -12,7 +12,7 @@ public class MinFunc implements Func {
     public Value map(Value[] values) {
         Value result = values[0];
         for (int i = 1; i < values.length; ++i) {
-            if (values[i].compareTo(result) < 0) {
+            if (values[i].compareTo(result) > 0) {
                 result = values[i];
             }
         }
@@ -21,6 +21,6 @@ public class MinFunc implements Func {
 
     @Override
     public String toString() {
-        return "MIN";
+        return "MAX";
     }
 }

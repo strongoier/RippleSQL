@@ -37,4 +37,22 @@ public class FilesUtil {
                     }
                 }).reduce(0L, (len1, len2)->len1 + len2);
     }
+
+    public static void displayOutput(MapReduceTask task) throws IOException {
+        final FileSystem fileSystem = FileSystem.get(new Configuration());
+        org.apache.hadoop.fs.Path outputPath = new org.apache.hadoop.fs.Path(task.outputPath);
+        Arrays.stream(fileSystem.listStatus(outputPath))
+                .filter(status->!status.isDir())
+                .map(FileStatus::getPath)
+                .forEach(path -> {
+                    try {
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(fileSystem.open(path)));
+                        String line = null;
+                        while ((line = reader.readLine()) != null)
+                            System.out.println(line);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e.getClass().getName() + " " + e.getCause());
+                    }
+                });
+    }
 }
