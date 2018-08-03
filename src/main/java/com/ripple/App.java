@@ -36,7 +36,8 @@ public class App {
             try {
                 parser.yyparse(lexer);
             } catch (RuntimeException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
+            } catch (Exception e) {
             }
         }
     }
